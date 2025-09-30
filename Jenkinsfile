@@ -3,12 +3,14 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                echo "Building" 
+                script {
+                    ./gradlew build -x test
+                }
             }
         }
         stage('Test') { 
             steps {
-                echo "Testing" 
+                ./gradlew build test
             }
         }
         stage('Deploy') { 
