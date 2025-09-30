@@ -3,14 +3,16 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                script {
-                    ./gradlew build -x test
+                withGradle {
+                    sh './gradlew build -x test'
                 }
             }
         }
         stage('Test') { 
             steps {
-                ./gradlew build test
+                withGradle {
+                    sh './gradlew test'
+                }
             }
         }
         stage('Deploy') { 
