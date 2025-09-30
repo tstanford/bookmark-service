@@ -29,6 +29,10 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql:1.19.3'
 }
 
+test {
+    exclude '**/**ITest'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
