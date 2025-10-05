@@ -1,11 +1,11 @@
 pipeline {
     agent any
-//    agent {
-//        docker {
-//              image 'eclipse-temurin:17.0.9_9-jdk-jammy'
-//              args '--network host -u root -v /var/run/docker.sock:/var/run/docker.sock'
-//        }
-//
+    environment {
+        DOCKERHUB_CREDENTIALS = "dockerHubCredentials"
+        KUBECONFIG = "/var/jenkins_home/.kube/config"
+        IMAGE_NAME = "bookmark-service"
+        IMAGE_TAG = "1.0.${BUILD_NUMBER}"
+    }
 
     stages {
         stage('Build') { 
@@ -22,6 +22,21 @@ pipeline {
                 }
             }
         }
+
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS, usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        docker.withRegistry('https://hub.docker.com/') {
+                            sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}"
+                            sh "docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG} ."
+                            sh "docker push ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}"
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Deploy') { 
             steps {
                 echo "Deploying" 
