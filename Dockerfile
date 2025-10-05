@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy the built JAR file into the container
 
-COPY build/libs/bookmark-service.jar app.jar
+COPY build/libs/bookmark-service*.jar app.jar
 
 # Expose the port your app runs on
 EXPOSE 8080
