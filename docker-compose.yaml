@@ -1,4 +1,15 @@
 services:
+  bookmark-service:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bookmarks
+      SPRING_DATASOURCE_USERNAME: bms_serviceuser
+      SPRING_DATASOURCE_PASSWORD: UCz46Remt17nnsCD
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:15
     container_name: postgres_db
