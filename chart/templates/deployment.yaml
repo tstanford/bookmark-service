@@ -19,15 +19,11 @@ spec:
           ports:
             - containerPort: {{ .Values.bookmarkService.port }}
           env:
-            - name: POSTGRES_HOST
-              value: {{ .Values.bookmarkService.env.POSTGRES_HOST }}
-            - name: POSTGRES_PORT
-              value: "{{ .Values.bookmarkService.env.POSTGRES_PORT }}"
-            - name: POSTGRES_DB
-              value: {{ .Values.bookmarkService.env.POSTGRES_DB }}
-            - name: POSTGRES_USER
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://{{ .Values.POSTGRES_HOST }}:{{ .Values.POSTGRES_PORT }}/{{ .Values.POSTGRES_DB}}
+            - name: SPRING_DATASOURCE_USERNAME
               value: {{ .Values.bookmarkService.env.POSTGRES_USER }}
-            - name: POSTGRES_PASSWORD
+            - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret
