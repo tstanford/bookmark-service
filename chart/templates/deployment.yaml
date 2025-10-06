@@ -20,7 +20,7 @@ spec:
             - containerPort: {{ .Values.bookmarkService.port }}
           env:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://{{ .Values.POSTGRES_HOST }}:{{ .Values.POSTGRES_PORT }}/{{ .Values.POSTGRES_DB}}
+              value: jdbc:postgresql://{{ .Values.bookmarkService.env.POSTGRES_HOST }}:{{ .Values.bookmarkService.env.POSTGRES_PORT }}/{{ .Values.bookmarkService.env.POSTGRES_DB}}
             - name: SPRING_DATASOURCE_USERNAME
               value: {{ .Values.bookmarkService.env.POSTGRES_USER }}
             - name: SPRING_DATASOURCE_PASSWORD
