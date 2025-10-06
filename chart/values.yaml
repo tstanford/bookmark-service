@@ -1,5 +1,6 @@
 bookmarkService:
-  image: tjstanford/bookmark-service:latest
+  image: tjstanford/bookmark-service
+  tag: 1.0.38
   port: 8080
   env:
     POSTGRES_HOST: postgres

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: bookmark-service
-          image: {{ .Values.bookmarkService.image }}
+          image: {{ .Values.bookmarkService.image }}:{{ .Values.bookmarkService.tag }}
           ports:
             - containerPort: {{ .Values.bookmarkService.port }}
           env:
