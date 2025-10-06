@@ -8,6 +8,6 @@ spec:
     app: bookmark-service
   ports:
     - protocol: TCP
-      port: 80
+      port: 8088
       targetPort: {{ .Values.bookmarkService.port }}
   type: LoadBalancer
