@@ -1,6 +1,6 @@
 bookmarkService:
   image: tjstanford/bookmark-service:latest
-  port: 8080
+  port: 8088
   env:
     POSTGRES_HOST: postgres
     POSTGRES_PORT: 5432
