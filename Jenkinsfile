@@ -38,6 +38,17 @@ pipeline {
             }
         }
 
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
+                        sh "curl https://get.helm.sh/helm-v3.19.0-linux-amd64.tar.gz | tar zxf - "
+                        sh "linux-amd64/helm upgrade --install bookmark-service ./chart --set image.tag=${IMAGE_TAG}"
+                    }
+                }
+            }
+        }
+
         stage('Deploy') { 
             steps {
                 echo "Deploying" 
