@@ -17,4 +17,7 @@ public interface BookmarksController {
 
     @DeleteMapping
     void deleteBookmark(int id);
+
+    @DeleteMapping("all")
+    void deleteAll();
 }

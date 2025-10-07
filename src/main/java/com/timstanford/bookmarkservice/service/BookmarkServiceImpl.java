@@ -57,7 +57,14 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         Bookmark bookmark = bookmarkMapper.mapToBookmark(bookmarkRequest);
         bookmark.setGroupId(group.getId());
-        return bookmarkMapper.mapToBookmarkResponse(bookmarksRepository.save(bookmark));
+
+        List<Bookmark> existingBookmarks = bookmarksRepository.findAllByGroupIdAndUrl(group.getId(), bookmark.getUrl());
+
+        if (!existingBookmarks.isEmpty()) {
+            return bookmarkMapper.mapToBookmarkResponse(bookmark);
+        } else {
+            return bookmarkMapper.mapToBookmarkResponse(bookmarksRepository.save(bookmark));
+        }
     }
 
     @Override
@@ -66,13 +73,10 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
-    public void deleteBookmarkByUrlAndGroupId(String groupName, String url){
-        var group = groupRepository.findByName(groupName).orElseThrow(() -> new RuntimeException("Group not found"));
-        var list = bookmarksRepository.findAllByGroupIdAndUrl(group.getId(), url);
-        list.forEach(bookmark -> bookmarksRepository.deleteById(bookmark.getId()));
-
+    public void deleteAll(){
+        bookmarksRepository.deleteAll();
+        groupRepository.deleteAll();
     }
-
 
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {
         Group group = new Group();

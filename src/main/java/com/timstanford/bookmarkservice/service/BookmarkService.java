@@ -11,5 +11,5 @@ public interface BookmarkService {
 
     void deleteBookmark(int id);
 
-    void deleteBookmarkByUrlAndGroupId(String groupName, String url);
+    void deleteAll();
 }

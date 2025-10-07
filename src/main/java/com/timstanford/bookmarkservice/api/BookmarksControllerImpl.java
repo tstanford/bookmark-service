@@ -12,9 +12,11 @@ import java.util.List;
 @RequestMapping("/bookmarks")
 public class BookmarksControllerImpl implements BookmarksController {
     private final BookmarkService bookmarkService;
+    private final BookmarkMapper bookmarkMapper;
 
-    public BookmarksControllerImpl(BookmarkService bookmarkService){
+    public BookmarksControllerImpl(BookmarkService bookmarkService, BookmarkMapper bookmarkMapper){
         this.bookmarkService = bookmarkService;
+        this.bookmarkMapper = bookmarkMapper;
     }
 
     @Override
@@ -30,6 +32,11 @@ public class BookmarksControllerImpl implements BookmarksController {
     @Override
     public void deleteBookmark(int id) {
         bookmarkService.deleteBookmark(id);
+    }
+
+    @Override
+    public void deleteAll(){
+        bookmarkService.deleteAll();
     }
 
 }
