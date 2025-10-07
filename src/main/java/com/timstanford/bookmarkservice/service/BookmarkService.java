@@ -8,4 +8,8 @@ public interface BookmarkService {
     List<GroupResponse> getAllBookmarks();
 
     BookmarkResponse addBookmark(BookmarkRequest bookmarkRequest);
+
+    void deleteBookmark(int id);
+
+    void deleteBookmarkByUrlAndGroupId(String groupName, String url);
 }

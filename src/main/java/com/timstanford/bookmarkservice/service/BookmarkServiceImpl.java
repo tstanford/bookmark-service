@@ -60,12 +60,26 @@ public class BookmarkServiceImpl implements BookmarkService {
         return bookmarkMapper.mapToBookmarkResponse(bookmarksRepository.save(bookmark));
     }
 
+    @Override
+    public void deleteBookmark(int id) {
+        bookmarksRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteBookmarkByUrlAndGroupId(String groupName, String url){
+        var group = groupRepository.findByName(groupName).orElseThrow(() -> new RuntimeException("Group not found"));
+        var list = bookmarksRepository.findAllByGroupIdAndUrl(group.getId(), url);
+        list.forEach(bookmark -> bookmarksRepository.deleteById(bookmark.getId()));
+
+    }
+
+
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {
         Group group = new Group();
         group.setName(bookmarkRequest.getGroupName());
         groupRepository.addGroupIfNotExists(group.getName());
 
-        return groupRepository.findByName(bookmarkRequest.getGroupName());
+        return groupRepository.findByName(bookmarkRequest.getGroupName()).orElseThrow(() -> new RuntimeException("Group Not Found"));
     }
 
     private GroupResponse mapToGroupResponse(Group group) {

@@ -14,4 +14,7 @@ public interface BookmarksController {
 
     @PostMapping
     BookmarkResponse addNewBookmark(@Validated @RequestBody BookmarkRequest bookmarkRequest);
+
+    @DeleteMapping
+    void deleteBookmark(int id);
 }

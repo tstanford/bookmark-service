@@ -1,14 +1,10 @@
 package com.timstanford.bookmarkservice;
 
-import com.timstanford.bookmarkservice.api.BookmarkRequest;
 import com.timstanford.bookmarkservice.data.BookmarksRepository;
 import com.timstanford.bookmarkservice.data.GroupRepository;
 import com.timstanford.bookmarkservice.service.BookmarkService;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,6 +36,11 @@ public class BookmarksControllerITest {
         postgres.start();
     }
 
+    @AfterEach
+    public void afterEach(){
+        deleteAllData();
+    }
+
     @AfterAll
     static void afterAll() {
         postgres.stop();
@@ -59,10 +60,10 @@ public class BookmarksControllerITest {
 
     @Test
     public void willGetAllBookmarks() throws Exception {
-        service.addBookmark(createBookmarkTestData("one", "http://www.alpha.com", "Alpha Site"));
-        service.addBookmark(createBookmarkTestData("one", "http://www.bravo.com", "Bravo Site"));
-        service.addBookmark(createBookmarkTestData("two", "http://www.charlie.com", "Charlie Site"));
-        service.addBookmark(createBookmarkTestData("two", "http://www.delta.com", "Delta Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.alpha.com", "Alpha Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.bravo.com", "Bravo Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.charlie.com", "Charlie Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.delta.com", "Delta Site"));
 
         String contentAsString = mockMvc.perform(get("/bookmarks"))
                 .andExpect(status().isOk())
@@ -74,12 +75,48 @@ public class BookmarksControllerITest {
 
     }
 
-    @NotNull
-    private static BookmarkRequest createBookmarkTestData(String groupName, String url, String title) {
-        BookmarkRequest bookmarkRequest = new BookmarkRequest();
-        bookmarkRequest.setGroupName(groupName);
-        bookmarkRequest.setUrl(url);
-        bookmarkRequest.setTitle(title);
-        return bookmarkRequest;
+    @Test
+    public void shouldDeleteMultipleBookmarksByUrlAndGroupId() throws Exception {
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.alpha.com", "Alpha Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.bravo.com", "Bravo Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.charlie.com", "Charlie Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.charlie.com", "Charlie Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.delta.com", "Delta Site"));
+
+        service.deleteBookmarkByUrlAndGroupId("two", "http://www.charlie.com");
+
+        String contentAsString = mockMvc.perform(get("/bookmarks"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Assert.assertEquals(contentAsString, "[{\"id\":9,\"name\":\"one\",\"bookmarks\":[{\"id\":9,\"title\":\"Alpha Site\",\"url\":\"http://www.alpha.com\",\"favicon\":null},{\"id\":10,\"title\":\"Bravo Site\",\"url\":\"http://www.bravo.com\",\"favicon\":null}]},{\"id\":11,\"name\":\"two\",\"bookmarks\":[{\"id\":13,\"title\":\"Delta Site\",\"url\":\"http://www.delta.com\",\"favicon\":null}]},{\"id\":null,\"name\":\"No Group\",\"bookmarks\":[]}]");
+
     }
+
+    @Test
+    public void shouldDeleteSingleBookmarksByUrlAndGroupId() throws Exception {
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.alpha.com", "Alpha Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.bravo.com", "Bravo Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.charlie.com", "Charlie Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.delta.com", "Delta Site"));
+
+        service.deleteBookmarkByUrlAndGroupId("two", "http://www.charlie.com");
+
+        String contentAsString = mockMvc.perform(get("/bookmarks"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Assert.assertEquals(contentAsString, "[{\"id\":5,\"name\":\"one\",\"bookmarks\":[{\"id\":5,\"title\":\"Alpha Site\",\"url\":\"http://www.alpha.com\",\"favicon\":null},{\"id\":6,\"title\":\"Bravo Site\",\"url\":\"http://www.bravo.com\",\"favicon\":null}]},{\"id\":7,\"name\":\"two\",\"bookmarks\":[{\"id\":8,\"title\":\"Delta Site\",\"url\":\"http://www.delta.com\",\"favicon\":null}]},{\"id\":null,\"name\":\"No Group\",\"bookmarks\":[]}]");
+
+    }
+
+    private void deleteAllData(){
+        bookmarksRepository.deleteAll();
+        groupRepository.deleteAll();
+    }
+
 }

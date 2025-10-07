@@ -7,5 +7,6 @@ import java.util.List;
 public interface BookmarksRepository extends JpaRepository<Bookmark, Integer> {
 
     List<Bookmark> findAllByGroupId(Integer groupId);
+    List<Bookmark> findAllByGroupIdAndUrl(Integer groupId, String url);
 
 }

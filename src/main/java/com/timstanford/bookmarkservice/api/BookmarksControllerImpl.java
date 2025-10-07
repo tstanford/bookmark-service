@@ -27,4 +27,9 @@ public class BookmarksControllerImpl implements BookmarksController {
         return bookmarkService.addBookmark(bookmarkRequest);
     }
 
+    @Override
+    public void deleteBookmark(int id) {
+        bookmarkService.deleteBookmark(id);
+    }
+
 }
