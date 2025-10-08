@@ -8,8 +8,10 @@ import com.timstanford.bookmarkservice.data.Group;
 import com.timstanford.bookmarkservice.data.GroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +57,10 @@ public class BookmarkServiceImpl implements BookmarkService {
     public BookmarkResponse addBookmark(BookmarkRequest bookmarkRequest) {
         Group group = findOrCreateGroupByName(bookmarkRequest);
 
+        if(bookmarkRequest.getFavicon().isBlank()) {
+            bookmarkRequest.setFavicon(getFavicon(bookmarkRequest.getUrl()));
+        }
+
         Bookmark bookmark = bookmarkMapper.mapToBookmark(bookmarkRequest);
         bookmark.setGroupId(group.getId());
 
@@ -65,6 +71,25 @@ public class BookmarkServiceImpl implements BookmarkService {
         } else {
             return bookmarkMapper.mapToBookmarkResponse(bookmarksRepository.save(bookmark));
         }
+    }
+
+    @Override
+    public String getFavicon(String site){
+        String icon = "";
+        try {
+            WebClient client = WebClient.create(site);
+            byte[] data = client.get()
+                    .uri("/favicon.ico")
+                    .retrieve()
+                    .bodyToMono(byte[].class)
+                    .share()
+                    .block();
+            icon = Base64.getEncoder().encodeToString(data);
+        } catch (Exception exception){
+            icon = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAoklEQVR4AU3PMcqDQBQE4HeZOY12NjYeIJJ4AnObYJN0Kr9eyTqgbiZvsiD6O82w34OFMYp0OeWxSJlEUTzKtqbCFej/wecCdY42graUaLTkOOCD/rXojgikRIW/BM8HbnSjpJVTirRFMYsmhhJDgmREGRiB8f823qdvfDrdVKHpkA7UFhNqha7HugORvdngsk8yjshqFOG0ZQSqwBOIx1anfpH8zz6kV+6TAAAAAElFTkSuQmCC";
+        }
+
+        return icon;
     }
 
     @Override

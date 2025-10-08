@@ -75,7 +75,7 @@ public class BookmarksControllerITest {
                 .getResponse()
                 .getContentAsString();
 
-        Assert.assertEquals("[{\"id\":null,\"name\":\"No Group\",\"bookmarks\":[]}]", contentAsString);
+        Assertions.assertEquals("[{\"id\":null,\"name\":\"No Group\",\"bookmarks\":[]}]", contentAsString);
 
     }
 
@@ -92,8 +92,14 @@ public class BookmarksControllerITest {
                 .getResponse()
                 .getContentAsString();
 
-        Assert.assertEquals("[{\"id\":5,\"name\":\"one\",\"bookmarks\":[{\"id\":5,\"title\":\"Alpha Site\",\"url\":\"http://www.alpha.com\",\"favicon\":null},{\"id\":6,\"title\":\"Bravo Site\",\"url\":\"http://www.bravo.com\",\"favicon\":null}]},{\"id\":7,\"name\":\"two\",\"bookmarks\":[{\"id\":7,\"title\":\"Charlie Site\",\"url\":\"http://www.charlie.com\",\"favicon\":null},{\"id\":8,\"title\":\"Delta Site\",\"url\":\"http://www.delta.com\",\"favicon\":null}]},{\"id\":null,\"name\":\"No Group\",\"bookmarks\":[]}]", contentAsString);
+        Assertions.assertEquals("[{\"id\":5,\"name\":\"one\",\"bookmarks\":[{\"id\":5,\"title\":\"Alpha Site\",\"url\":\"http://www.alpha.com\",\"favicon\":null},{\"id\":6,\"title\":\"Bravo Site\",\"url\":\"http://www.bravo.com\",\"favicon\":null}]},{\"id\":7,\"name\":\"two\",\"bookmarks\":[{\"id\":7,\"title\":\"Charlie Site\",\"url\":\"http://www.charlie.com\",\"favicon\":null},{\"id\":8,\"title\":\"Delta Site\",\"url\":\"http://www.delta.com\",\"favicon\":null}]},{\"id\":null,\"name\":\"No Group\",\"bookmarks\":[]}]", contentAsString);
 
+    }
+
+    @Test
+    public void willDownloadFavicon() {
+        String favicon = service.getFavicon("https://jenkins.timcloud.uk");
+        Assertions.assertNotNull(favicon);
     }
 
     private void deleteAllData(){
