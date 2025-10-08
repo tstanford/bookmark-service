@@ -57,7 +57,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     public BookmarkResponse addBookmark(BookmarkRequest bookmarkRequest) {
         Group group = findOrCreateGroupByName(bookmarkRequest);
 
-        if(bookmarkRequest.getFavicon().isBlank()) {
+        if(bookmarkRequest.getFavicon() == null) {
             bookmarkRequest.setFavicon(getFavicon(bookmarkRequest.getUrl()));
         }
 
