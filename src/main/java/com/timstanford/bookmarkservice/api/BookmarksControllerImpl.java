@@ -1,5 +1,6 @@
 package com.timstanford.bookmarkservice.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.timstanford.bookmarkservice.service.BookmarkResponse;
 import com.timstanford.bookmarkservice.service.BookmarkService;
 import com.timstanford.bookmarkservice.service.GroupResponse;
@@ -37,6 +38,11 @@ public class BookmarksControllerImpl implements BookmarksController {
     @Override
     public void deleteAll(){
         bookmarkService.deleteAll();
+    }
+
+    @Override
+    public void importFromYaml(@RequestBody String yaml) throws JsonProcessingException {
+        bookmarkService.importFromYaml(yaml);
     }
 
 }

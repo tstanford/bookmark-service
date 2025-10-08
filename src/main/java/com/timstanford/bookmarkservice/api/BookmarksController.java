@@ -1,5 +1,6 @@
 package com.timstanford.bookmarkservice.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.timstanford.bookmarkservice.service.BookmarkResponse;
 import com.timstanford.bookmarkservice.service.GroupResponse;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +19,9 @@ public interface BookmarksController {
     @DeleteMapping
     void deleteBookmark(int id);
 
-    @DeleteMapping("all")
+    @DeleteMapping("/all")
     void deleteAll();
+
+    @PostMapping("/import")
+    void importFromYaml(@RequestBody String yaml) throws JsonProcessingException;
 }

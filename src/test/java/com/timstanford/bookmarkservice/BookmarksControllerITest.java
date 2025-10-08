@@ -8,13 +8,13 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -95,6 +95,38 @@ public class BookmarksControllerITest {
 //        Assertions.assertEquals("[{\"id\":5,\"name\":\"one\",\"bookmarks\":[{\"id\":5,\"title\":\"Alpha Site\",\"url\":\"http://www.alpha.com\",\"favicon\":null},{\"id\":6,\"title\":\"Bravo Site\",\"url\":\"http://www.bravo.com\",\"favicon\":null}]},{\"id\":7,\"name\":\"two\",\"bookmarks\":[{\"id\":7,\"title\":\"Charlie Site\",\"url\":\"http://www.charlie.com\",\"favicon\":null},{\"id\":8,\"title\":\"Delta Site\",\"url\":\"http://www.delta.com\",\"favicon\":null}]},{\"id\":null,\"name\":\"No Group\",\"bookmarks\":[]}]", contentAsString);
 //
 //    }
+
+    @Test
+    public void importFromYamlFile() throws Exception {
+        mockMvc.perform(post("/bookmarks/import")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("---\n" +
+                                "groups:\n" +
+                                "  - name: Group one\n" +
+                                "    bookmarks:\n" +
+                                "      - title: Cloudflare\n" +
+                                "        url: https://www.cloudflare.com/\n" +
+                                "      - title: Jenkins\n" +
+                                "        url: https://alpha.com\n" +
+                                "      - title: PVE\n" +
+                                "        url: https://beta.com\n" +
+                                "      - title: Nginx Proxy Manager - Admin\n" +
+                                "        url: http://delta.com/\n" +
+                                "      - title: Portainer\n" +
+                                "        url: https://blah.com\n" +
+                                "      - title: Wordpress\n" +
+                                "        url: https://someplace.com/\n" +
+                                "      - title: K3S Test\n" +
+                                "        url: https://testing.com/\n" +
+                                "\n" +
+                                "  - name: Blogs\n" +
+                                "    bookmarks:\n" +
+                                "      - title: Baeldung\n" +
+                                "        url: https://www.baeldung.com/\n"))
+                .andExpect(status().isOk());
+
+        var groups = groupRepository.findAll();
+    }
 
     @Test
     public void willDownloadFavicon() {

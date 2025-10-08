@@ -1,5 +1,8 @@
 package com.timstanford.bookmarkservice.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.timstanford.bookmarkservice.api.BookmarkMapper;
 import com.timstanford.bookmarkservice.api.BookmarkRequest;
 import com.timstanford.bookmarkservice.data.Bookmark;
@@ -8,6 +11,7 @@ import com.timstanford.bookmarkservice.data.Group;
 import com.timstanford.bookmarkservice.data.GroupRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
@@ -21,6 +25,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final BookmarksRepository bookmarksRepository;
     private final GroupRepository groupRepository;
     private final BookmarkMapper bookmarkMapper;
+    private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
 
     public BookmarkServiceImpl(
             BookmarksRepository bookmarksRepository,
@@ -101,6 +106,12 @@ public class BookmarkServiceImpl implements BookmarkService {
     public void deleteAll(){
         bookmarksRepository.deleteAll();
         groupRepository.deleteAll();
+    }
+
+    @Override
+    public void importFromYaml(String yaml) throws JsonProcessingException {
+        ImportFile file = yamlMapper.readValue(yaml, ImportFile.class);
+        System.out.println(file);
     }
 
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {
