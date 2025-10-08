@@ -126,6 +126,7 @@ public class BookmarksControllerITest {
                 .andExpect(status().isOk());
 
         var groups = groupRepository.findAll();
+        Assertions.assertEquals(2, groups.size());
     }
 
     @Test

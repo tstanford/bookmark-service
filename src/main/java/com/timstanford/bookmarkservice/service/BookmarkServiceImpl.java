@@ -78,23 +78,27 @@ public class BookmarkServiceImpl implements BookmarkService {
         }
     }
 
-    @Override
-    public String getFavicon(String site){
-        String icon = "";
-        try {
-            WebClient client = WebClient.create(site);
-            byte[] data = client.get()
-                    .uri("/favicon.ico")
-                    .retrieve()
-                    .bodyToMono(byte[].class)
-                    .share()
-                    .block();
-            icon = Base64.getEncoder().encodeToString(data);
-        } catch (Exception exception){
-            icon = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAoklEQVR4AU3PMcqDQBQE4HeZOY12NjYeIJJ4AnObYJN0Kr9eyTqgbiZvsiD6O82w34OFMYp0OeWxSJlEUTzKtqbCFej/wecCdY42graUaLTkOOCD/rXojgikRIW/BM8HbnSjpJVTirRFMYsmhhJDgmREGRiB8f823qdvfDrdVKHpkA7UFhNqha7HugORvdngsk8yjshqFOG0ZQSqwBOIx1anfpH8zz6kV+6TAAAAAElFTkSuQmCC";
-        }
+//    @Override
+//    public String getFavicon(String site){
+//        String icon = "";
+//        try {
+//            WebClient client = WebClient.create(site);
+//            byte[] data = client.get()
+//                    .uri("/favicon.ico")
+//                    .retrieve()
+//                    .bodyToMono(byte[].class)
+//                    .share()
+//                    .block();
+//            icon = Base64.getEncoder().encodeToString(data);
+//        } catch (Exception exception){
+//            icon = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAoklEQVR4AU3PMcqDQBQE4HeZOY12NjYeIJJ4AnObYJN0Kr9eyTqgbiZvsiD6O82w34OFMYp0OeWxSJlEUTzKtqbCFej/wecCdY42graUaLTkOOCD/rXojgikRIW/BM8HbnSjpJVTirRFMYsmhhJDgmREGRiB8f823qdvfDrdVKHpkA7UFhNqha7HugORvdngsk8yjshqFOG0ZQSqwBOIx1anfpH8zz6kV+6TAAAAAElFTkSuQmCC";
+//        }
+//
+//        return icon;
+//    }
 
-        return icon;
+    public String getFavicon(String site){
+        return "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAoklEQVR4AU3PMcqDQBQE4HeZOY12NjYeIJJ4AnObYJN0Kr9eyTqgbiZvsiD6O82w34OFMYp0OeWxSJlEUTzKtqbCFej/wecCdY42graUaLTkOOCD/rXojgikRIW/BM8HbnSjpJVTirRFMYsmhhJDgmREGRiB8f823qdvfDrdVKHpkA7UFhNqha7HugORvdngsk8yjshqFOG0ZQSqwBOIx1anfpH8zz6kV+6TAAAAAElFTkSuQmCC";
     }
 
     @Override
@@ -109,15 +113,22 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
+    @Transactional
     public void importFromYaml(String yaml) throws JsonProcessingException {
         ImportFile file = yamlMapper.readValue(yaml, ImportFile.class);
-        System.out.println(file);
+        file.getGroups().forEach(group -> {
+            group.getBookmarks().forEach(bookmark -> {
+                var bookmarkRequest = new BookmarkRequest();
+                bookmarkRequest.setGroupName(group.getName());
+                bookmarkRequest.setTitle(bookmark.getTitle());
+                bookmarkRequest.setUrl(bookmark.getUrl());
+                addBookmark(bookmarkRequest);
+            });
+        });
     }
 
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {
-        Group group = new Group();
-        group.setName(bookmarkRequest.getGroupName());
-        groupRepository.addGroupIfNotExists(group.getName());
+        groupRepository.addGroupIfNotExists(bookmarkRequest.getGroupName());
 
         return groupRepository.findByName(bookmarkRequest.getGroupName()).orElseThrow(() -> new RuntimeException("Group Not Found"));
     }
