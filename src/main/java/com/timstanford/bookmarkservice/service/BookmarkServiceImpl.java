@@ -33,16 +33,19 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final BookmarksRepository bookmarksRepository;
     private final GroupRepository groupRepository;
     private final BookmarkMapper bookmarkMapper;
+    private final FaviconDownloader faviconDownloader;
     private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
 
     public BookmarkServiceImpl(
             BookmarksRepository bookmarksRepository,
             GroupRepository groupRepository,
-            BookmarkMapper bookmarkMapper
+            BookmarkMapper bookmarkMapper,
+            FaviconDownloader faviconDownloader
     ) {
         this.bookmarksRepository = bookmarksRepository;
         this.groupRepository = groupRepository;
         this.bookmarkMapper = bookmarkMapper;
+        this.faviconDownloader = faviconDownloader;
     }
 
     @Override
@@ -69,7 +72,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         Group group = findOrCreateGroupByName(bookmarkRequest);
 
         if(bookmarkRequest.getFavicon() == null) {
-            bookmarkRequest.setFavicon(getFavicon(bookmarkRequest.getUrl()));
+            bookmarkRequest.setFavicon(faviconDownloader.getFavicon(bookmarkRequest.getUrl()));
         }
 
         Bookmark bookmark = bookmarkMapper.mapToBookmark(bookmarkRequest);
@@ -83,76 +86,6 @@ public class BookmarkServiceImpl implements BookmarkService {
             return bookmarkMapper.mapToBookmarkResponse(bookmarksRepository.save(bookmark));
         }
     }
-
-//    @Override
-//    public String getFavicon(String site){
-//        String icon = "";
-//        try {
-//            WebClient client = WebClient.create(site);
-//            byte[] data = client.get()
-//                    .uri("/favicon.ico")
-//                    .retrieve()
-//                    .bodyToMono(byte[].class)
-//                    .share()
-//                    .block();
-//            icon = Base64.getEncoder().encodeToString(data);
-//        } catch (Exception exception){
-//            icon = "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAoklEQVR4AU3PMcqDQBQE4HeZOY12NjYeIJJ4AnObYJN0Kr9eyTqgbiZvsiD6O82w34OFMYp0OeWxSJlEUTzKtqbCFej/wecCdY42graUaLTkOOCD/rXojgikRIW/BM8HbnSjpJVTirRFMYsmhhJDgmREGRiB8f823qdvfDrdVKHpkA7UFhNqha7HugORvdngsk8yjshqFOG0ZQSqwBOIx1anfpH8zz6kV+6TAAAAAElFTkSuQmCC";
-//        }
-//
-//        return icon;
-//    }
-
-    public String getFavicon(String websiteUrl) {
-        String faviconUrl = null;
-
-        try {
-            // Fetch and parse the HTML
-            Document doc = Jsoup.connect(websiteUrl)
-                    .userAgent("Mozilla/5.0")
-                    .get();
-
-            // Try to find favicon link in HTML
-
-            for (Element link : doc.select("link[rel~=(?i)^(shortcut icon|icon)]")) {
-                faviconUrl = link.attr("abs:href"); // Get absolute URL
-                if (!faviconUrl.isEmpty()) break;
-            }
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
-        }
-
-        // Fallback to /favicon.ico if not found
-        if (faviconUrl == null || faviconUrl.isEmpty()) {
-            URL url = null;
-            try {
-                url = new URL(websiteUrl);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            }
-            faviconUrl = url.getProtocol() + "://" + url.getHost() + "/favicon.ico";
-        }
-
-        // Download the favicon
-        String icon = "";
-        try {
-        WebClient client = WebClient.create(faviconUrl);
-        byte[] data = client.get()
-                .retrieve()
-                .bodyToMono(byte[].class)
-                .share()
-                .block();
-        icon = Base64.getEncoder().encodeToString(data);
-        return icon;
-        } catch (Exception exception){
-            return "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAoklEQVR4AU3PMcqDQBQE4HeZOY12NjYeIJJ4AnObYJN0Kr9eyTqgbiZvsiD6O82w34OFMYp0OeWxSJlEUTzKtqbCFej/wecCdY42graUaLTkOOCD/rXojgikRIW/BM8HbnSjpJVTirRFMYsmhhJDgmREGRiB8f823qdvfDrdVKHpkA7UFhNqha7HugORvdngsk8yjshqFOG0ZQSqwBOIx1anfpH8zz6kV+6TAAAAAElFTkSuQmCC";
-        }
-    }
-
-
-//    public String getFavicon(String site){
-//        return "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAAAAAA6mKC9AAAAoklEQVR4AU3PMcqDQBQE4HeZOY12NjYeIJJ4AnObYJN0Kr9eyTqgbiZvsiD6O82w34OFMYp0OeWxSJlEUTzKtqbCFej/wecCdY42graUaLTkOOCD/rXojgikRIW/BM8HbnSjpJVTirRFMYsmhhJDgmREGRiB8f823qdvfDrdVKHpkA7UFhNqha7HugORvdngsk8yjshqFOG0ZQSqwBOIx1anfpH8zz6kV+6TAAAAAElFTkSuQmCC";
-//    }
 
     @Override
     public void deleteBookmark(int id) {

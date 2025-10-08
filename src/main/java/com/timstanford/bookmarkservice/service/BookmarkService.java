@@ -11,8 +11,6 @@ public interface BookmarkService {
 
     BookmarkResponse addBookmark(BookmarkRequest bookmarkRequest);
 
-    String getFavicon(String site);
-
     void deleteBookmark(int id);
 
     void deleteAll();
