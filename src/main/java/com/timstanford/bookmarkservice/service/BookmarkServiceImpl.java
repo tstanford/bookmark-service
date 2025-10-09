@@ -13,8 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.timstanford.bookmarkservice.service.Constants.DEFAULT_ICON;
 
 @Service
 public class BookmarkServiceImpl implements BookmarkService {
@@ -62,6 +65,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         Bookmark bookmark = bookmarkMapper.mapToBookmark(bookmarkRequest);
         bookmark.setGroupId(group.getId());
+        bookmark.setFavicon(Base64.getDecoder().decode(DEFAULT_ICON));
 
         List<Bookmark> existingBookmarks = bookmarksRepository.findAllByGroupIdAndUrl(group.getId(), bookmark.getUrl());
 
