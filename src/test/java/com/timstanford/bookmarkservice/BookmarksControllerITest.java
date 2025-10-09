@@ -1,10 +1,13 @@
 package com.timstanford.bookmarkservice;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.timstanford.bookmarkservice.data.Bookmark;
 import com.timstanford.bookmarkservice.data.BookmarksRepository;
 import com.timstanford.bookmarkservice.data.GroupRepository;
 import com.timstanford.bookmarkservice.service.BookmarkService;
 import com.timstanford.bookmarkservice.service.FaviconDownloader;
-import org.junit.Assert;
+import com.timstanford.bookmarkservice.service.GroupResponse;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,6 +19,9 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +31,9 @@ public class BookmarksControllerITest {
 
     @MockBean
     FaviconDownloader faviconDownloader;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
             "postgres:15-alpine"
@@ -80,26 +89,31 @@ public class BookmarksControllerITest {
                 .getResponse()
                 .getContentAsString();
 
-        Assertions.assertEquals("[]", contentAsString);
+        assertEquals("[]", contentAsString);
 
     }
-//
-//    @Test
-//    public void willGetAllBookmarks() throws Exception {
-//        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.alpha.com", "Alpha Site"));
-//        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.bravo.com", "Bravo Site"));
-//        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.charlie.com", "Charlie Site"));
-//        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.delta.com", "Delta Site"));
-//
-//        String contentAsString = mockMvc.perform(get("/bookmarks"))
-//                .andExpect(status().isOk())
-//                .andReturn()
-//                .getResponse()
-//                .getContentAsString();
-//
-//        Assertions.assertEquals("[{\"id\":5,\"name\":\"one\",\"bookmarks\":[{\"id\":5,\"title\":\"Alpha Site\",\"url\":\"http://www.alpha.com\",\"favicon\":null},{\"id\":6,\"title\":\"Bravo Site\",\"url\":\"http://www.bravo.com\",\"favicon\":null}]},{\"id\":7,\"name\":\"two\",\"bookmarks\":[{\"id\":7,\"title\":\"Charlie Site\",\"url\":\"http://www.charlie.com\",\"favicon\":null},{\"id\":8,\"title\":\"Delta Site\",\"url\":\"http://www.delta.com\",\"favicon\":null}]},{\"id\":null,\"name\":\"No Group\",\"bookmarks\":[]}]", contentAsString);
-//
-//    }
+
+    @Test
+    public void willGetAllBookmarks() throws Exception {
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.alpha.com", "Alpha Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.bravo.com", "Bravo Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.charlie.com", "Charlie Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.delta.com", "Delta Site"));
+
+        String contentAsString = mockMvc.perform(get("/bookmarks"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        List<GroupResponse> groups = objectMapper.readValue(contentAsString, new TypeReference<>() {});
+
+        assertEquals(2, groups.size());
+        assertEquals("one", groups.get(0).getName());
+        assertEquals(2, groups.get(0).getBookmarks().size());
+        assertEquals("two", groups.get(1).getName());
+        assertEquals(2, groups.get(1).getBookmarks().size());
+    }
 
     @Test
     public void importFromYamlFile() throws Exception {
@@ -131,7 +145,7 @@ public class BookmarksControllerITest {
                 .andExpect(status().isOk());
 
         var groups = groupRepository.findAll();
-        Assertions.assertEquals(2, groups.size());
+        assertEquals(2, groups.size());
     }
 
     private void deleteAllData(){
