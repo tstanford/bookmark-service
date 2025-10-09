@@ -9,21 +9,10 @@ import com.timstanford.bookmarkservice.data.Bookmark;
 import com.timstanford.bookmarkservice.data.BookmarksRepository;
 import com.timstanford.bookmarkservice.data.Group;
 import com.timstanford.bookmarkservice.data.GroupRepository;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,10 +60,6 @@ public class BookmarkServiceImpl implements BookmarkService {
     public BookmarkResponse addBookmark(BookmarkRequest bookmarkRequest) {
         Group group = findOrCreateGroupByName(bookmarkRequest);
 
-        if(bookmarkRequest.getFavicon() == null) {
-            bookmarkRequest.setFavicon(faviconDownloader.getFavicon(bookmarkRequest.getUrl()));
-        }
-
         Bookmark bookmark = bookmarkMapper.mapToBookmark(bookmarkRequest);
         bookmark.setGroupId(group.getId());
 
@@ -83,7 +68,9 @@ public class BookmarkServiceImpl implements BookmarkService {
         if (!existingBookmarks.isEmpty()) {
             return bookmarkMapper.mapToBookmarkResponse(bookmark);
         } else {
-            return bookmarkMapper.mapToBookmarkResponse(bookmarksRepository.save(bookmark));
+            Bookmark savedBookmark = bookmarksRepository.save(bookmark);
+            faviconDownloader.updateFavicon(bookmark.getId(), bookmark.getUrl());
+            return bookmarkMapper.mapToBookmarkResponse(savedBookmark);
         }
     }
 
