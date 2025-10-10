@@ -10,8 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 
@@ -28,6 +27,7 @@ public class FaviconDownloader {
     @Async
     private CompletableFuture<String> getFavicon(String websiteUrl) {
         String faviconUrl = null;
+        String icon;
 
         try {
             // Fetch and parse the HTML
@@ -41,24 +41,15 @@ public class FaviconDownloader {
                 faviconUrl = link.attr("abs:href"); // Get absolute URL
                 if (!faviconUrl.isEmpty()) break;
             }
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
-        }
 
-        // Fallback to /favicon.ico if not found
-        if (faviconUrl == null || faviconUrl.isEmpty()) {
-            URL url = null;
-            try {
-                url = new URL(websiteUrl);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
+            // Fallback to /favicon.ico if not found
+            if (faviconUrl == null || faviconUrl.isEmpty()) {
+                URI url;
+                url = URI.create(websiteUrl);
+                faviconUrl = url.getScheme() + "://" + url.getHost() + "/favicon.ico";
             }
-            faviconUrl = url.getProtocol() + "://" + url.getHost() + "/favicon.ico";
-        }
 
-        // Download the favicon
-        String icon = "";
-        try {
+            // Download the favicon
             WebClient client = WebClient.create(faviconUrl);
             byte[] data = client.get()
                     .retrieve()
@@ -66,7 +57,8 @@ public class FaviconDownloader {
                     .share()
                     .block();
             icon = Base64.getEncoder().encodeToString(data);
-        } catch (Exception exception){
+
+        } catch (Exception exception) {
             icon = Constants.DEFAULT_ICON;
         }
         return CompletableFuture.completedFuture(icon);
@@ -75,14 +67,12 @@ public class FaviconDownloader {
     @Async
     public void updateFavicon(int bookmarkId, String url) {
         logger.debug("getting favicon for {}", url);
-        getFavicon(url).thenAccept(icon -> {
-            bookmarksRepository
-                    .findById(bookmarkId)
-                    .ifPresent(bookmark -> {
-                        bookmark.setFavicon(Base64.getDecoder().decode(icon));
-                        bookmarksRepository.save(bookmark);
-                        logger.debug("saved favicon for {}", url);
-            });
-        });
+        getFavicon(url).thenAccept(icon -> bookmarksRepository
+                .findById(bookmarkId)
+                .ifPresent(bookmark -> {
+                    bookmark.setFavicon(Base64.getDecoder().decode(icon));
+                    bookmarksRepository.save(bookmark);
+                    logger.debug("saved favicon for {}", url);
+        }));
     }
 }
