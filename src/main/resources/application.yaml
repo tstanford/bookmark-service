@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bookmarks
+    username: bms_serviceuser
+    password: UCz46Remt17nnsCD
+
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      base-path: /manage
+      exposure:
+        include:
+          - health
+  endpoint:
+    health:
+      show-details: always
