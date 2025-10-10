@@ -30,18 +30,18 @@ spec:
                   key: password
           livenessProbe:
             httpGet:
-              path: /actuator/health
-              port: 8088
+              path: /manage/health
+              port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
-            failureThreshold: 10
+            failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /actuator/health
-              port: 8088
-            initialDelaySeconds: 15
-            periodSeconds: 10
-            failureThreshold: 10
+              path: /manage/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
           strategy:
             type: RollingUpdate
             rollingUpdate:
