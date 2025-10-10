@@ -10,7 +10,13 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.net.URI;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 
@@ -30,6 +36,7 @@ public class FaviconDownloader {
         String icon;
 
         try {
+            trustAllCertificates();
             // Fetch and parse the HTML
             Document doc = Jsoup.connect(websiteUrl)
                     .userAgent("Mozilla/5.0")
@@ -74,5 +81,22 @@ public class FaviconDownloader {
                     bookmarksRepository.save(bookmark);
                     logger.debug("saved favicon for {}", url);
         }));
+    }
+
+    private static void trustAllCertificates() throws Exception {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() { return null; }
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+                }
+        };
+
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        // Disable hostname verification
+        HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
     }
 }
