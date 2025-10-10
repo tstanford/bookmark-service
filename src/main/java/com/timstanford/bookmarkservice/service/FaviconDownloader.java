@@ -36,17 +36,22 @@ public class FaviconDownloader {
         String icon;
 
         try {
-            trustAllCertificates();
-            // Fetch and parse the HTML
-            Document doc = Jsoup.connect(websiteUrl)
-                    .userAgent("Mozilla/5.0")
-                    .get();
+            try {
+                trustAllCertificates();
 
-            // Try to find favicon link in HTML
+                // Fetch and parse the HTML
+                Document doc = Jsoup.connect(websiteUrl)
+                        .userAgent("Mozilla/5.0")
+                        .get();
 
-            for (Element link : doc.select("link[rel~=(?i)^(shortcut icon|icon)]")) {
-                faviconUrl = link.attr("abs:href"); // Get absolute URL
-                if (!faviconUrl.isEmpty()) break;
+                // Try to find favicon link in HTML
+
+                for (Element link : doc.select("link[rel~=(?i)^(shortcut icon|icon)]")) {
+                    faviconUrl = link.attr("abs:href"); // Get absolute URL
+                    if (!faviconUrl.isEmpty()) break;
+                }
+            } catch(Exception ignored) {
+
             }
 
             // Fallback to /favicon.ico if not found
