@@ -7,6 +7,13 @@ pipeline {
         IMAGE_TAG = "1.0.${BUILD_NUMBER}"
     }
 
+    properties([
+      buildDiscarder(logRotator(
+        daysToKeepStr: '30',
+        numToKeepStr: '10'
+      ))
+    ])
+
     stages {
         stage('Build') { 
             steps {
