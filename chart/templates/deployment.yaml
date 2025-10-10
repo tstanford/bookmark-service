@@ -4,7 +4,7 @@ metadata:
   name: bookmark-service
   namespace: ns-bookmark-service
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: bookmark-service
