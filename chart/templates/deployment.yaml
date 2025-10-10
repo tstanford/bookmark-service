@@ -34,14 +34,14 @@ spec:
               port: 8080
             initialDelaySeconds: 30
             periodSeconds: 10
-            failureThreshold: 3
+            failureThreshold: 5
           readinessProbe:
             httpGet:
               path: /manage/health
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
-            failureThreshold: 3
+            failureThreshold: 20
           strategy:
             type: RollingUpdate
             rollingUpdate:
