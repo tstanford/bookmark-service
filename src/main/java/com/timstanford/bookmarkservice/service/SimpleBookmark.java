@@ -4,6 +4,8 @@ public class SimpleBookmark {
     private String title;
     private String url;
 
+    private String faviconUrl;
+
     public String getTitle() {
         return title;
     }
@@ -18,5 +20,13 @@ public class SimpleBookmark {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getFaviconUrl() {
+        return faviconUrl;
+    }
+
+    public void setFaviconUrl(String faviconUrl) {
+        this.faviconUrl = faviconUrl;
     }
 }
