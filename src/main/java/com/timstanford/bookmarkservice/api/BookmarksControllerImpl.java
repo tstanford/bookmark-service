@@ -10,14 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bookmarks")
 public class BookmarksControllerImpl implements BookmarksController {
     private final BookmarkService bookmarkService;
-    private final BookmarkMapper bookmarkMapper;
 
-    public BookmarksControllerImpl(BookmarkService bookmarkService, BookmarkMapper bookmarkMapper){
+    public BookmarksControllerImpl(BookmarkService bookmarkService){
         this.bookmarkService = bookmarkService;
-        this.bookmarkMapper = bookmarkMapper;
     }
 
     @Override
@@ -26,8 +23,13 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
-    public BookmarkResponse addNewBookmark(@Validated @RequestBody BookmarkRequest bookmarkRequest) {
+    public BookmarkResponse addNewBookmark(BookmarkRequest bookmarkRequest) {
         return bookmarkService.addBookmark(bookmarkRequest);
+    }
+
+    @Override
+    public void addNewGroup(String title) {
+        bookmarkService.addNewGroup(title);
     }
 
     @Override
@@ -41,7 +43,7 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
-    public void importFromYaml(@RequestBody String yaml) throws JsonProcessingException {
+    public void importFromYaml(String yaml) throws JsonProcessingException {
         bookmarkService.importFromYaml(yaml);
     }
 

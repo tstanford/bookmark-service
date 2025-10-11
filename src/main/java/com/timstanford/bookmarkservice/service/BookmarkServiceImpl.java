@@ -99,15 +99,25 @@ public class BookmarkServiceImpl implements BookmarkService {
                 bookmarkRequest.setGroupName(group.getName());
                 bookmarkRequest.setTitle(bookmark.getTitle());
                 bookmarkRequest.setUrl(bookmark.getUrl());
+                bookmarkRequest.setFaviconUrl(bookmark.getFaviconUrl());
                 addBookmark(bookmarkRequest);
             });
         });
     }
 
-    private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {
-        groupRepository.addGroupIfNotExists(bookmarkRequest.getGroupName());
+    @Override
+    @Transactional
+    public Group addNewGroup(String title) {
+        return findOrCreateGroupByName(title);
+    }
 
-        return groupRepository.findByName(bookmarkRequest.getGroupName()).orElseThrow(() -> new RuntimeException("Group Not Found"));
+    private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {
+        return findOrCreateGroupByName(bookmarkRequest.getGroupName());
+    }
+
+    private Group findOrCreateGroupByName(String title) {
+        groupRepository.addGroupIfNotExists(title);
+        return groupRepository.findByName(title).orElseThrow(() -> new RuntimeException("Group Not Found"));
     }
 
     private GroupResponse mapToGroupResponse(Group group) {
