@@ -10,14 +10,17 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 public interface BookmarksController {
-    @GetMapping
+    @GetMapping("/bookmarks")
     List<GroupResponse> getBookmarks();
 
-    @PostMapping
+    @PostMapping("/bookmarks")
     BookmarkResponse addNewBookmark(@Validated @RequestBody BookmarkRequest bookmarkRequest);
 
-    @DeleteMapping
+    @DeleteMapping("/bookmarks")
     void deleteBookmark(int id);
+
+    @PostMapping("/group")
+    void addNewGroup(@RequestBody String title);
 
     @DeleteMapping("/all")
     void deleteAll();
