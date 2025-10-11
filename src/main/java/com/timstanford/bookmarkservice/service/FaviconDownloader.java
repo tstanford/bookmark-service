@@ -41,7 +41,9 @@ public class FaviconDownloader {
 
                 // Fetch and parse the HTML
                 Document doc = Jsoup.connect(websiteUrl)
-                        .userAgent("Mozilla/5.0")
+                        .userAgent("Mozilla/5.0 ...")
+                        .referrer("https://www.google.com")
+                        .header("Accept", "text/html")
                         .get();
 
                 // Try to find favicon link in HTML
@@ -50,7 +52,8 @@ public class FaviconDownloader {
                     faviconUrl = link.attr("abs:href"); // Get absolute URL
                     if (!faviconUrl.isEmpty()) break;
                 }
-            } catch(Exception ignored) {
+            } catch(Exception exception) {
+                System.out.println(exception);
 
             }
 
