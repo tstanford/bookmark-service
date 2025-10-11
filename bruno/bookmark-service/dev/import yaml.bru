@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/bookmarks/import
+  url: http://localhost:8080/import
   body: text
   auth: inherit
 }
@@ -17,16 +17,24 @@ body:text {
       bookmarks:
         - title: Cloudflare
           url: https://www.cloudflare.com/
+          
         - title: Jenkins
           url: https://jenkins.timcloud.uk
+          
         - title: PVE
           url: https://pve.stanford.local:8006
+          
         - title: Nginx Proxy Manager - Admin
           url: http://mercury:81/
+          
         - title: Portainer
           url: https://192.168.0.29:9443/#!/home
+          faviconUrl: https://icon.icepanel.io/Technology/svg/Portainer.svg
+          
+          
         - title: Wordpress
           url: https://www.timcloud.uk/
+          
         - title: K3S Test
           url: https://test.timcloud.uk/
   

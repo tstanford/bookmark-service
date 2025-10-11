@@ -1,0 +1,79 @@
+meta {
+  name: import yaml
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://192.168.0.30:8088/bookmarks/import
+  body: text
+  auth: inherit
+}
+
+body:json {
+  ---
+  groups:
+    - name: Home Lab
+      bookmarks:
+        - title: Cloudflare
+          url: https://www.cloudflare.com/
+        - title: Jenkins
+          url: https://jenkins.timcloud.uk
+        - title: PVE
+          url: https://pve.stanford.local:8006
+        - title: Nginx Proxy Manager - Admin
+          url: http://mercury:81/
+        - title: Portainer
+          url: https://192.168.0.29:9443/#!/home
+        - title: Wordpress
+          url: https://www.timcloud.uk/
+        - title: K3S Test
+          url: https://test.timcloud.uk/
+  
+    - name: Blogs
+      bookmarks:
+        - title: Baeldung
+          url: https://www.baeldung.com/
+  
+}
+
+body:text {
+  ---
+  groups:
+    - name: Home Lab
+      bookmarks:
+        - title: Cloudflare
+          url: https://www.cloudflare.com/
+          
+        - title: Jenkins
+          url: https://jenkins.timcloud.uk
+          
+        - title: PVE
+          url: https://pve.stanford.local:8006
+          
+        - title: Nginx Proxy Manager - Admin
+          url: http://mercury:81/
+          #faviconUrl: http://mercury:81/images/favicons/favicon-32x32.png
+          
+        - title: Portainer
+          url: https://192.168.0.29:9443/#!/home
+          
+        - title: Wordpress
+          url: https://www.timcloud.uk/
+          
+        - title: K3S Test
+          url: https://test.timcloud.uk/
+  
+    - name: Blogs
+      bookmarks:
+        - title: Baeldung
+          url: https://www.baeldung.com/
+          
+        - title: News
+          url: https://news.bbc.co.uk
+  
+}
+
+settings {
+  encodeUrl: true
+}
