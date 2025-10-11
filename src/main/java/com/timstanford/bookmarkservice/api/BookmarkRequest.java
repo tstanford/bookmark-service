@@ -11,6 +11,7 @@ public class BookmarkRequest {
     private String url;
 
     private String favicon;
+    private String faviconUrl;
 
     public String getGroupName() {
         return groupName;
@@ -44,5 +45,13 @@ public class BookmarkRequest {
 
     public void setFavicon(String favicon) {
         this.favicon = favicon;
+    }
+
+    public void setFaviconUrl(String faviconUrl) {
+        this.faviconUrl = faviconUrl;
+    }
+
+    public String getFaviconUrl() {
+        return faviconUrl;
     }
 }
