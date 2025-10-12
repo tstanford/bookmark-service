@@ -80,7 +80,7 @@ public class BookmarksControllerITest {
         service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.charlie.com", "Charlie Site"));
         service.addBookmark(BookmarkTestData.createBookmarkTestData("two", "http://www.delta.com", "Delta Site"));
 
-        mockMvc.perform(delete("/bookmarks/all"))
+        mockMvc.perform(delete("/all"))
                 .andExpect(status().isOk());
 
         String contentAsString = mockMvc.perform(get("/bookmarks"))
@@ -117,7 +117,7 @@ public class BookmarksControllerITest {
 
     @Test
     public void importFromYamlFile() throws Exception {
-        mockMvc.perform(post("/bookmarks/import")
+        mockMvc.perform(post("/import")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("---\n" +
                                 "groups:\n" +
