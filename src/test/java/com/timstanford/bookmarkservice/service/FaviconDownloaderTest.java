@@ -10,7 +10,6 @@ import java.util.Optional;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class FaviconDownloaderTest {
     private final BookmarksRepository bookmarksRepository = mock(BookmarksRepository.class);
 
