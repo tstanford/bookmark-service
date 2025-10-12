@@ -1,0 +1,19 @@
+meta {
+  name: add new group
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://192.168.0.30:8088/group
+  body: text
+  auth: inherit
+}
+
+body:text {
+  tims test
+}
+
+settings {
+  encodeUrl: true
+}
