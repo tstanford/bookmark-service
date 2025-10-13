@@ -48,7 +48,7 @@ public class BookmarkServiceImpl implements BookmarkService {
                 .collect(Collectors.toList());
 
         groups.stream().forEach(groupResponse -> {
-            List<Bookmark> allByGroupId = bookmarksRepository.findAllByGroupId(groupResponse.getId());
+            List<Bookmark> allByGroupId = bookmarksRepository.findAllByGroupIdOrderByTitle(groupResponse.getId());
             List<BookmarkResponse> bookmarkResponses = allByGroupId.stream()
                     .map(bookmarkMapper::mapToBookmarkResponse)
                     .collect(Collectors.toList());
