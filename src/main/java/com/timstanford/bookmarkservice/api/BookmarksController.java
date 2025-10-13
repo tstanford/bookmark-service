@@ -25,6 +25,9 @@ public interface BookmarksController {
     @DeleteMapping("/all")
     void deleteAll();
 
+    @PutMapping("/bookmarks")
+    void moveBookmark(@RequestBody BookmarkMoveRequest request);
+
     @PostMapping("/import")
     void importFromYaml(@RequestBody String yaml) throws JsonProcessingException;
 }

@@ -43,6 +43,11 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
+    public void moveBookmark(BookmarkMoveRequest request) {
+        bookmarkService.moveBookmark(request.getBookmarkId(), request.getGroupName());
+    }
+
+    @Override
     public void importFromYaml(String yaml) throws JsonProcessingException {
         bookmarkService.importFromYaml(yaml);
     }

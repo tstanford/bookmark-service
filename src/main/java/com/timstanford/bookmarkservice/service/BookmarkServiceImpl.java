@@ -111,6 +111,16 @@ public class BookmarkServiceImpl implements BookmarkService {
         return findOrCreateGroupByName(title);
     }
 
+    @Override
+    @Transactional
+    public void moveBookmark(int bookmarkId, String groupName) {
+        Group group = findOrCreateGroupByName(groupName);
+
+        Bookmark bookmark = bookmarksRepository.getReferenceById(bookmarkId);
+        bookmark.setGroupId(group.getId());
+        bookmarksRepository.save(bookmark);
+    }
+
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {
         return findOrCreateGroupByName(bookmarkRequest.getGroupName());
     }

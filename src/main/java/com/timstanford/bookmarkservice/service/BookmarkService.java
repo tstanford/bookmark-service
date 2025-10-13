@@ -18,4 +18,6 @@ public interface BookmarkService {
     void importFromYaml(String yaml) throws JsonProcessingException;
 
     Group addNewGroup(String title);
+
+    void moveBookmark(int bookmarkId, String groupName);
 }
