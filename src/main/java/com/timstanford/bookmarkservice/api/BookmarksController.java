@@ -16,7 +16,7 @@ public interface BookmarksController {
     @PostMapping("/bookmarks")
     BookmarkResponse addNewBookmark(@Validated @RequestBody BookmarkRequest bookmarkRequest);
 
-    @DeleteMapping("/bookmarks")
+    @DeleteMapping("/bookmarks/{id}")
     void deleteBookmark(int id);
 
     @PostMapping("/group")

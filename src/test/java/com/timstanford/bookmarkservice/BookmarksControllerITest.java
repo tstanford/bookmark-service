@@ -153,4 +153,26 @@ public class BookmarksControllerITest {
         groupRepository.deleteAll();
     }
 
+    @Test
+    void deleteBookmark() throws Exception {
+        var response = service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.alpha.com", "Alpha Site"));
+        service.addBookmark(BookmarkTestData.createBookmarkTestData("one", "http://www.bravo.com", "Bravo Site"));
+
+        mockMvc.perform(delete("/bookmarks/"+response.getId()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String contentAsString = mockMvc.perform(get("/bookmarks"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        List<GroupResponse> groups = objectMapper.readValue(contentAsString, new TypeReference<>() {});
+
+        assertEquals(1, groups.size());
+        assertEquals("one", groups.get(0).getName());
+        assertEquals(1, groups.get(0).getBookmarks().size());
+        assertEquals("http://www.bravo.com", groups.get(0).getBookmarks().get(0).getUrl());
+    }
 }
