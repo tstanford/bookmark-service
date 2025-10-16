@@ -33,7 +33,12 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
-    public void deleteBookmark(@PathVariable int id) {
+    public void deleteGroup(int id) {
+        bookmarkService.deleteGroup(id);
+    }
+
+    @Override
+    public void deleteBookmark(int id) {
         bookmarkService.deleteBookmark(id);
     }
 

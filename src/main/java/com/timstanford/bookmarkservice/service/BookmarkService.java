@@ -20,4 +20,6 @@ public interface BookmarkService {
     Group addNewGroup(String title);
 
     void moveBookmark(int bookmarkId, String groupName);
+
+    void deleteGroup(int id);
 }

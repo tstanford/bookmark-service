@@ -17,10 +17,13 @@ public interface BookmarksController {
     BookmarkResponse addNewBookmark(@Validated @RequestBody BookmarkRequest bookmarkRequest);
 
     @DeleteMapping("/bookmarks/{id}")
-    void deleteBookmark(int id);
+    void deleteBookmark(@PathVariable int id);
 
     @PostMapping("/group")
     void addNewGroup(@RequestBody String title);
+
+    @DeleteMapping("/group/{id}")
+    void deleteGroup(@PathVariable int id);
 
     @DeleteMapping("/all")
     void deleteAll();

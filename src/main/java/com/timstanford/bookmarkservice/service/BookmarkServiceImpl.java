@@ -121,6 +121,16 @@ public class BookmarkServiceImpl implements BookmarkService {
         bookmarksRepository.save(bookmark);
     }
 
+    @Override
+    public void deleteGroup(int id) {
+        var byGroupId = bookmarksRepository.getByGroupId(id);
+        if(byGroupId.isEmpty()) {
+            groupRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Group is not empty");
+        }
+    }
+
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {
         return findOrCreateGroupByName(bookmarkRequest.getGroupName());
     }
