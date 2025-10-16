@@ -36,7 +36,7 @@ public class BookmarksControllerITest {
     ObjectMapper objectMapper;
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
-            "postgres:15-alpine"
+            "postgres:16-alpine"
     );
 
     @DynamicPropertySource

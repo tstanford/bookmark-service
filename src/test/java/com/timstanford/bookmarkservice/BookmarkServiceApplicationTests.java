@@ -14,7 +14,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 class BookmarkServiceApplicationTests {
 
 	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
-			"postgres:15-alpine"
+			"postgres:16-alpine"
 	);
 
 	@DynamicPropertySource
