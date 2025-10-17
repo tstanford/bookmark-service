@@ -65,7 +65,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         Bookmark bookmark = bookmarkMapper.mapToBookmark(bookmarkRequest);
         bookmark.setGroupId(group.getId());
-        bookmark.setFavicon(Base64.getDecoder().decode(DEFAULT_ICON));
+        bookmark.setFavicon("data:image/png;base64,"+DEFAULT_ICON);
 
         List<Bookmark> existingBookmarks = bookmarksRepository.findAllByGroupIdAndUrl(group.getId(), bookmark.getUrl());
 

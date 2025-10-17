@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -64,17 +65,25 @@ public class FaviconDownloader {
                 faviconUrl = url.getScheme() + "://" + url.getHost() + "/favicon.ico";
             }
 
-            // Download the favicon
             WebClient client = WebClient.create(faviconUrl);
+
+            //get mime type
+            ResponseEntity<String> response = client.get()
+                    .retrieve()
+                    .toEntity(String.class)
+                    .block();
+            String contentType = response.getHeaders().getContentType().toString();
+
+            // Download the favicon
             byte[] data = client.get()
                     .retrieve()
                     .bodyToMono(byte[].class)
                     .share()
                     .block();
-            icon = Base64.getEncoder().encodeToString(data);
+            icon = "data:"+contentType+";base64,"+Base64.getEncoder().encodeToString(data);
 
         } catch (Exception exception) {
-            icon = Constants.DEFAULT_ICON;
+            icon = "data:image/png;base64,"+Constants.DEFAULT_ICON;
         }
         return CompletableFuture.completedFuture(icon);
     }
@@ -85,7 +94,7 @@ public class FaviconDownloader {
         getFavicon(url).thenAccept(icon -> bookmarksRepository
                 .findById(bookmarkId)
                 .ifPresent(bookmark -> {
-                    bookmark.setFavicon(Base64.getDecoder().decode(icon));
+                    bookmark.setFavicon(icon);
                     bookmarksRepository.save(bookmark);
                     logger.debug("saved favicon for {}", url);
         }));

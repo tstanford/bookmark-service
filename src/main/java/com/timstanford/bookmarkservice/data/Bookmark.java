@@ -19,8 +19,8 @@ public class Bookmark {
     @Column(name = "url", length = 4096)
     private String url;
 
-    @Column(name = "favicon")
-    private byte[] favicon;
+    @Column(name = "favicon2", length = 200000)
+    private String favicon;
 
     @Column(name = "group_id")
     private Integer groupId;
@@ -49,11 +49,11 @@ public class Bookmark {
         this.url = url;
     }
 
-    public byte[] getFavicon() {
+    public String getFavicon() {
         return favicon;
     }
 
-    public void setFavicon(byte[] favicon) {
+    public void setFavicon(String favicon) {
         this.favicon = favicon;
     }
 

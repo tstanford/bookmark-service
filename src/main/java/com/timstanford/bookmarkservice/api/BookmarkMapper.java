@@ -13,7 +13,7 @@ public class BookmarkMapper {
         bookmark.setTitle(bookmarkRequest.getTitle());
         bookmark.setUrl(bookmarkRequest.getUrl());
         if (bookmarkRequest.getFavicon() != null) {
-            bookmark.setFavicon(Base64.getDecoder().decode(bookmarkRequest.getFavicon()));
+            bookmark.setFavicon(bookmarkRequest.getFavicon());
         }
         return bookmark;
     }

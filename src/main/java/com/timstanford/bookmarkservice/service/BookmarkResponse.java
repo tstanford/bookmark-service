@@ -7,7 +7,7 @@ public class BookmarkResponse {
 
     private String url;
 
-    private byte[] favicon;
+    private String favicon;
 
     public int getId() {
         return id;
@@ -33,11 +33,11 @@ public class BookmarkResponse {
         this.url = url;
     }
 
-    public byte[] getFavicon() {
+    public String getFavicon() {
         return favicon;
     }
 
-    public void setFavicon(byte[] favicon) {
+    public void setFavicon(String favicon) {
         this.favicon = favicon;
     }
 }
