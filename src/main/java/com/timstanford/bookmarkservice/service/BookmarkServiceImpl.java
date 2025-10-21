@@ -9,11 +9,11 @@ import com.timstanford.bookmarkservice.data.Bookmark;
 import com.timstanford.bookmarkservice.data.BookmarksRepository;
 import com.timstanford.bookmarkservice.data.Group;
 import com.timstanford.bookmarkservice.data.GroupRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +42,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     public List<GroupResponse> getAllBookmarks() {
-        List<GroupResponse> groups = groupRepository.findAll()
+        List<GroupResponse> groups = groupRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
                 .stream()
                 .map(this::mapToGroupResponse)
                 .collect(Collectors.toList());
