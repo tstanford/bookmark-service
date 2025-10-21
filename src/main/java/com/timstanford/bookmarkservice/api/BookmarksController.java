@@ -31,6 +31,9 @@ public interface BookmarksController {
     @PutMapping("/bookmarks")
     void moveBookmark(@RequestBody BookmarkMoveRequest request);
 
+    @PutMapping("/group/{id}")
+    void renameGroupName(@PathVariable int id, @RequestBody String newGroupName);
+
     @PostMapping("/import")
     void importFromYaml(@RequestBody String yaml) throws JsonProcessingException;
 }

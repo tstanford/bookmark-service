@@ -131,6 +131,18 @@ public class BookmarkServiceImpl implements BookmarkService {
         }
     }
 
+    @Override
+    public void renameGroup(int id, String newGroupName) {
+        var group = groupRepository.findById(id).orElseThrow(() -> new RuntimeException("Group does not exist by id "+id));
+
+        if(groupRepository.findByName(newGroupName).isPresent()) {
+            throw new RuntimeException("Group with that name already exists");
+        }
+
+        group.setName(newGroupName);
+        groupRepository.save(group);
+    }
+
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {
         return findOrCreateGroupByName(bookmarkRequest.getGroupName());
     }

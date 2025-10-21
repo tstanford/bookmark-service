@@ -53,6 +53,11 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
+    public void renameGroupName(int id, String newGroupName) {
+        bookmarkService.renameGroup(id, newGroupName);
+    }
+
+    @Override
     public void importFromYaml(String yaml) throws JsonProcessingException {
         bookmarkService.importFromYaml(yaml);
     }

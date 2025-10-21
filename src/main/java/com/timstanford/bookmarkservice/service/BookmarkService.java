@@ -22,4 +22,6 @@ public interface BookmarkService {
     void moveBookmark(int bookmarkId, String groupName);
 
     void deleteGroup(int id);
+
+    void renameGroup(int id, String newGroupName);
 }
