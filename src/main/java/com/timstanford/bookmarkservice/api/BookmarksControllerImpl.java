@@ -2,6 +2,7 @@ package com.timstanford.bookmarkservice.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.timstanford.bookmarkservice.service.*;
+import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,9 +65,15 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
-    public String exportToYaml() {
+    public ResponseEntity<String> exportToYaml() {
         try {
-            return bookmarkService.export();
+            var fileContent = bookmarkService.export();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDisposition(ContentDisposition.attachment().filename("export.yaml").build());
+
+            return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
         } catch (JsonProcessingException e) {
             throw new FailedToExportException(e);
         }
