@@ -2,13 +2,13 @@ package com.timstanford.bookmarkservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.timstanford.bookmarkservice.api.BookmarkMapper;
 import com.timstanford.bookmarkservice.api.BookmarkRequest;
 import com.timstanford.bookmarkservice.data.Bookmark;
 import com.timstanford.bookmarkservice.data.BookmarksRepository;
 import com.timstanford.bookmarkservice.data.Group;
 import com.timstanford.bookmarkservice.data.GroupRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,18 +26,20 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final GroupRepository groupRepository;
     private final BookmarkMapper bookmarkMapper;
     private final FaviconDownloader faviconDownloader;
-    private final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+    private final ObjectMapper yamlMapper;
 
     public BookmarkServiceImpl(
             BookmarksRepository bookmarksRepository,
             GroupRepository groupRepository,
             BookmarkMapper bookmarkMapper,
-            FaviconDownloader faviconDownloader
+            FaviconDownloader faviconDownloader,
+            @Qualifier("yamlmapper") ObjectMapper yamlMapper
     ) {
         this.bookmarksRepository = bookmarksRepository;
         this.groupRepository = groupRepository;
         this.bookmarkMapper = bookmarkMapper;
         this.faviconDownloader = faviconDownloader;
+        this.yamlMapper = yamlMapper;
     }
 
     @Override
@@ -141,6 +143,19 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         group.setName(newGroupName);
         groupRepository.save(group);
+    }
+
+    @Override
+    public String export() throws JsonProcessingException {
+        var data = getAllBookmarks();
+        ImportFile file = new ImportFile();
+        file.setGroups(data.stream().map(groupResponse -> {
+            ImportGroup importGroup = new ImportGroup(groupResponse.getName());
+            importGroup.setBookmarks(bookmarkMapper.mapToListOfSimpleBookmarks(groupResponse));
+            return importGroup;
+        }).toList());
+
+        return yamlMapper.writeValueAsString(file);
     }
 
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {

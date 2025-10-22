@@ -36,4 +36,8 @@ public interface BookmarksController {
 
     @PostMapping("/import")
     void importFromYaml(@RequestBody String yaml) throws JsonProcessingException;
+
+    @GetMapping("/export")
+    String exportToYaml();
+
 }

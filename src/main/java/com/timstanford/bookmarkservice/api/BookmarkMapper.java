@@ -2,9 +2,12 @@ package com.timstanford.bookmarkservice.api;
 
 import com.timstanford.bookmarkservice.data.Bookmark;
 import com.timstanford.bookmarkservice.service.BookmarkResponse;
+import com.timstanford.bookmarkservice.service.GroupResponse;
+import com.timstanford.bookmarkservice.service.SimpleBookmark;
 import org.springframework.stereotype.Component;
 
 import java.util.Base64;
+import java.util.List;
 
 @Component
 public class BookmarkMapper {
@@ -25,5 +28,18 @@ public class BookmarkMapper {
         bookmarkResponse.setUrl(bookmark.getUrl());
         bookmarkResponse.setFavicon(bookmark.getFavicon());
         return bookmarkResponse;
+    }
+
+    public List<SimpleBookmark> mapToListOfSimpleBookmarks(GroupResponse groupResponse) {
+        return groupResponse.getBookmarks()
+                .stream()
+                .map(this::mapToSimpleBookmark).toList();
+    }
+
+    public SimpleBookmark mapToSimpleBookmark(BookmarkResponse bookmarkResponse) {
+        var simpleBookmark = new SimpleBookmark();
+        simpleBookmark.setUrl(bookmarkResponse.getUrl());
+        simpleBookmark.setTitle(bookmarkResponse.getTitle());
+        return simpleBookmark;
     }
 }

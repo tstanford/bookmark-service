@@ -24,4 +24,6 @@ public interface BookmarkService {
     void deleteGroup(int id);
 
     void renameGroup(int id, String newGroupName);
+
+    String export() throws JsonProcessingException;
 }
