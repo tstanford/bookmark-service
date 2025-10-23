@@ -6,7 +6,10 @@ import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -71,7 +74,7 @@ public class BookmarksControllerImpl implements BookmarksController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDisposition(ContentDisposition.attachment().filename("export.yaml").build());
+            headers.setContentDisposition(ContentDisposition.attachment().filename(String.format("bookmarks_%s.yaml", LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))).build());
 
             return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
         } catch (JsonProcessingException e) {
