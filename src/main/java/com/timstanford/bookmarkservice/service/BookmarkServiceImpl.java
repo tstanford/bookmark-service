@@ -2,6 +2,7 @@ package com.timstanford.bookmarkservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.timstanford.bookmarkservice.api.BookmarkEditRequest;
 import com.timstanford.bookmarkservice.api.BookmarkMapper;
 import com.timstanford.bookmarkservice.api.BookmarkRequest;
 import com.timstanford.bookmarkservice.data.Bookmark;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.timstanford.bookmarkservice.service.Constants.DEFAULT_ICON;
@@ -156,6 +158,17 @@ public class BookmarkServiceImpl implements BookmarkService {
         }).toList());
 
         return yamlMapper.writeValueAsString(file);
+    }
+
+    @Override
+    @Transactional
+    public void editBookmark(int id, BookmarkEditRequest request) {
+        var bookmark = bookmarksRepository.findById(id).orElseThrow(() -> new BookmarkNotFoundException(id));
+
+        bookmark.setTitle(request.getTitle());
+        bookmark.setUrl(request.getUrl());
+
+        bookmarksRepository.save(bookmark);
     }
 
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {

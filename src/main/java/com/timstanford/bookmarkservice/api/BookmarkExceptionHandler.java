@@ -1,5 +1,6 @@
 package com.timstanford.bookmarkservice.api;
 
+import com.timstanford.bookmarkservice.service.BookmarkNotFoundException;
 import com.timstanford.bookmarkservice.service.GroupAlreadyExistsException;
 import com.timstanford.bookmarkservice.service.GroupNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,11 @@ public class BookmarkExceptionHandler {
 
     @ExceptionHandler(GroupNotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(GroupNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(BookmarkNotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(BookmarkNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 

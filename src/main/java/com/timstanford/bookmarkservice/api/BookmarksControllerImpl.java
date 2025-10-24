@@ -53,8 +53,13 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
-    public void moveBookmark(BookmarkMoveRequest request) {
+    public void editBookmark(BookmarkMoveRequest request) {
         bookmarkService.moveBookmark(request.getBookmarkId(), request.getGroupName());
+    }
+
+    @Override
+    public void editBookmark(int id, BookmarkEditRequest request) {
+        bookmarkService.editBookmark(id, request);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.timstanford.bookmarkservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.timstanford.bookmarkservice.api.BookmarkEditRequest;
 import com.timstanford.bookmarkservice.api.BookmarkRequest;
 import com.timstanford.bookmarkservice.data.Group;
 
@@ -26,4 +27,6 @@ public interface BookmarkService {
     void renameGroup(int id, String newGroupName);
 
     String export() throws JsonProcessingException;
+
+    void editBookmark(int id, BookmarkEditRequest request);
 }

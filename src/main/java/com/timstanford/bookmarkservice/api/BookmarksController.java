@@ -3,7 +3,6 @@ package com.timstanford.bookmarkservice.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.timstanford.bookmarkservice.service.BookmarkResponse;
 import com.timstanford.bookmarkservice.service.GroupResponse;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,10 @@ public interface BookmarksController {
     void deleteAll();
 
     @PutMapping("/bookmarks")
-    void moveBookmark(@RequestBody BookmarkMoveRequest request);
+    void editBookmark(@RequestBody BookmarkMoveRequest request);
+
+    @PutMapping("/bookmark/{id}")
+    void editBookmark(@PathVariable int id, @RequestBody BookmarkEditRequest request);
 
     @PutMapping("/group/{id}")
     void renameGroupName(@PathVariable int id, @RequestBody String newGroupName);

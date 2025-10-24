@@ -7,6 +7,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bookmarks
       SPRING_DATASOURCE_USERNAME: bms_serviceuser
       SPRING_DATASOURCE_PASSWORD: UCz46Remt17nnsCD
+      SPRING_JPA_HIBERNATE_DDL-AUTO: create-drop
     depends_on:
       - postgres
 
