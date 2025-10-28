@@ -1,10 +1,17 @@
 package com.timstanford.bookmarkservice.data;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "[user]")
 public class User {
+    @GeneratedValue
+    @Id
+    private int userId;
+
+    @Column(unique=true)
     private String username;
+
     private String password;
 
     public User() {
@@ -30,5 +37,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

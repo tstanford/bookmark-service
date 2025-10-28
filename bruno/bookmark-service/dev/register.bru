@@ -1,11 +1,11 @@
 meta {
-  name: Login
+  name: register
   type: http
-  seq: 7
+  seq: 8
 }
 
 post {
-  url: http://localhost:8080/login
+  url: http://localhost:8080/register
   body: json
   auth: none
 }
@@ -15,10 +15,6 @@ body:json {
     "username": "tim",
     "password": "password"
   }
-}
-
-script:post-response {
-  bru.setVar("token", res.getBody())
 }
 
 settings {

@@ -14,6 +14,8 @@ public class Group {
     @Column(name = "name", unique=true)
     private String name;
 
+    private int userId;
+
     public Integer getId() {
         return id;
     }
@@ -28,5 +30,13 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

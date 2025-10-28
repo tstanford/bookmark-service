@@ -39,11 +39,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/v3/api-docs/**",
-                                "/webjars/**",
-                                "/favicon.ico").permitAll() // Public endpoints
+                        .requestMatchers("/login", "/register", "/manage/health")
+                        .permitAll() // Public endpoints
                         .anyRequest().authenticated()) // Secure all other endpoints
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
