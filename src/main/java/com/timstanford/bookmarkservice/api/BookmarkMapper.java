@@ -1,12 +1,12 @@
 package com.timstanford.bookmarkservice.api;
 
+import com.timstanford.bookmarkservice.api.dtos.BookmarkRequest;
 import com.timstanford.bookmarkservice.data.Bookmark;
 import com.timstanford.bookmarkservice.service.BookmarkResponse;
 import com.timstanford.bookmarkservice.service.GroupResponse;
 import com.timstanford.bookmarkservice.service.SimpleBookmark;
 import org.springframework.stereotype.Component;
 
-import java.util.Base64;
 import java.util.List;
 
 @Component

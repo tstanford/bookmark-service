@@ -1,16 +1,18 @@
 package com.timstanford.bookmarkservice.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkEditRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkMoveRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkRequest;
 import com.timstanford.bookmarkservice.service.BookmarkResponse;
 import com.timstanford.bookmarkservice.service.GroupResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*")
 public interface BookmarksController {
 
     @GetMapping("/bookmarks")

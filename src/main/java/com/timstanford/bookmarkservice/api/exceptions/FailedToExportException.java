@@ -1,4 +1,4 @@
-package com.timstanford.bookmarkservice.api;
+package com.timstanford.bookmarkservice.api.exceptions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 

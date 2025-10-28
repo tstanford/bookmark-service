@@ -1,6 +1,6 @@
 package com.timstanford.bookmarkservice.config;
 
-import com.timstanford.bookmarkservice.api.JwtAuthenticationFilter;
+import com.timstanford.bookmarkservice.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

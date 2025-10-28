@@ -1,4 +1,4 @@
-package com.timstanford.bookmarkservice.api;
+package com.timstanford.bookmarkservice.security;
 
 public class LoginRequest {
     private String username;

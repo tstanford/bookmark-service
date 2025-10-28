@@ -7,15 +7,7 @@ public class User {
     private String username;
     private String password;
 
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    private List<Role> roles;
-
     public User() {
-        roles = new ArrayList<>();
-        roles.add(new Role("ROLE_USER"));
     }
 
     public User(String username, String password) {

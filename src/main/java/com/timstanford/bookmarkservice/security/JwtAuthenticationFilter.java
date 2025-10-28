@@ -1,4 +1,4 @@
-package com.timstanford.bookmarkservice.api;
+package com.timstanford.bookmarkservice.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

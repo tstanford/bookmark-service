@@ -1,7 +1,6 @@
-package com.timstanford.bookmarkservice.api;
+package com.timstanford.bookmarkservice.security;
 
 import com.timstanford.bookmarkservice.data.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,10 +33,6 @@ public class UserDetail implements UserDetailsService {
                 .findFirst()
                 .orElseThrow(() -> new UsernameNotFoundException("User not exists by Username"));
 
-        Set<GrantedAuthority> authorities = user.getRoles().stream()
-                .map((role) -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toSet());
-
-        return new org.springframework.security.core.userdetails.User(username,user.getPassword(),authorities);
+        return new org.springframework.security.core.userdetails.User(username,user.getPassword(),new ArrayList<>());
     }
 }

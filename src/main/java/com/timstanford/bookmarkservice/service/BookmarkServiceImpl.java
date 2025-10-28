@@ -2,9 +2,12 @@ package com.timstanford.bookmarkservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.timstanford.bookmarkservice.api.BookmarkEditRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkEditRequest;
 import com.timstanford.bookmarkservice.api.BookmarkMapper;
-import com.timstanford.bookmarkservice.api.BookmarkRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkRequest;
+import com.timstanford.bookmarkservice.api.exceptions.BookmarkNotFoundException;
+import com.timstanford.bookmarkservice.api.exceptions.GroupAlreadyExistsException;
+import com.timstanford.bookmarkservice.api.exceptions.GroupNotFoundException;
 import com.timstanford.bookmarkservice.data.Bookmark;
 import com.timstanford.bookmarkservice.data.BookmarksRepository;
 import com.timstanford.bookmarkservice.data.Group;
@@ -16,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.timstanford.bookmarkservice.service.Constants.DEFAULT_ICON;

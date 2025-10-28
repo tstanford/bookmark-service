@@ -1,4 +1,4 @@
-package com.timstanford.bookmarkservice.service;
+package com.timstanford.bookmarkservice.api.exceptions;
 
 public class GroupAlreadyExistsException extends RuntimeException {
     public GroupAlreadyExistsException() {

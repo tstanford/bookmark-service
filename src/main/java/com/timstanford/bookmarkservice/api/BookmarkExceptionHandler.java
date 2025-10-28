@@ -1,8 +1,8 @@
 package com.timstanford.bookmarkservice.api;
 
-import com.timstanford.bookmarkservice.service.BookmarkNotFoundException;
-import com.timstanford.bookmarkservice.service.GroupAlreadyExistsException;
-import com.timstanford.bookmarkservice.service.GroupNotFoundException;
+import com.timstanford.bookmarkservice.api.exceptions.BookmarkNotFoundException;
+import com.timstanford.bookmarkservice.api.exceptions.GroupAlreadyExistsException;
+import com.timstanford.bookmarkservice.api.exceptions.GroupNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
