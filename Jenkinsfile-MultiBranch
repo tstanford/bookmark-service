@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    environment {
+        DOCKERHUB_CREDENTIALS = "dockerHubCredentials"
+        KUBECONFIG = "/var/jenkins_home/.kube/config"
+        IMAGE_NAME = "bookmark-service"
+        IMAGE_TAG = "1.0.${BUILD_NUMBER}"
+    }
+
+    options {
+        buildDiscarder(logRotator(
+          daysToKeepStr: '30',
+          numToKeepStr: '10'
+        ))
+      }
+
+    stages {
+        stage('Build') { 
+            steps {
+                withGradle {
+                    sh './gradlew build -x test'
+                }
+            }
+        }
+        stage('Test') { 
+            steps {
+                withGradle {
+                    sh './gradlew test'
+                }
+            }
+        }
+    }
+}
