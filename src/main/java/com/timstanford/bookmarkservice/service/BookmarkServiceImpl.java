@@ -2,32 +2,36 @@ package com.timstanford.bookmarkservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.timstanford.bookmarkservice.api.BookmarkEditRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkEditRequest;
 import com.timstanford.bookmarkservice.api.BookmarkMapper;
-import com.timstanford.bookmarkservice.api.BookmarkRequest;
-import com.timstanford.bookmarkservice.data.Bookmark;
-import com.timstanford.bookmarkservice.data.BookmarksRepository;
-import com.timstanford.bookmarkservice.data.Group;
-import com.timstanford.bookmarkservice.data.GroupRepository;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkRequest;
+import com.timstanford.bookmarkservice.api.exceptions.BookmarkNotFoundException;
+import com.timstanford.bookmarkservice.api.exceptions.GroupAlreadyExistsException;
+import com.timstanford.bookmarkservice.api.exceptions.GroupNotFoundException;
+import com.timstanford.bookmarkservice.data.*;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.timstanford.bookmarkservice.service.Constants.DEFAULT_ICON;
 
 @Service
 public class BookmarkServiceImpl implements BookmarkService {
-
     private final BookmarksRepository bookmarksRepository;
+
     private final GroupRepository groupRepository;
     private final BookmarkMapper bookmarkMapper;
     private final FaviconDownloader faviconDownloader;
+    private final UserRepository userRepository;
     private final ObjectMapper yamlMapper;
 
     public BookmarkServiceImpl(
@@ -35,18 +39,27 @@ public class BookmarkServiceImpl implements BookmarkService {
             GroupRepository groupRepository,
             BookmarkMapper bookmarkMapper,
             FaviconDownloader faviconDownloader,
+            UserRepository userRepository,
             @Qualifier("yamlmapper") ObjectMapper yamlMapper
     ) {
         this.bookmarksRepository = bookmarksRepository;
         this.groupRepository = groupRepository;
         this.bookmarkMapper = bookmarkMapper;
         this.faviconDownloader = faviconDownloader;
+        this.userRepository = userRepository;
         this.yamlMapper = yamlMapper;
+    }
+
+    @Cacheable("userid")
+    private int getUserId() {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        return user.getUserId();
     }
 
     @Override
     public List<GroupResponse> getAllBookmarks() {
-        List<GroupResponse> groups = groupRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
+        List<GroupResponse> groups = groupRepository.findAllByUserIdOrderByName(getUserId())
                 .stream()
                 .map(this::mapToGroupResponse)
                 .collect(Collectors.toList());
@@ -88,9 +101,11 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
+    @Transactional
     public void deleteAll(){
-        bookmarksRepository.deleteAll();
-        groupRepository.deleteAll();
+        var groups = groupRepository.findAllByUserIdOrderByName(getUserId());
+        groups.forEach(group -> bookmarksRepository.deleteAllByGroupId(group.getId()));
+        groupRepository.deleteAllByUserId(getUserId());
     }
 
     @Override
@@ -139,7 +154,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     public void renameGroup(int id, String newGroupName) {
         var group = groupRepository.findById(id).orElseThrow(() -> new GroupNotFoundException(id));
 
-        if(groupRepository.findByName(newGroupName).isPresent()) {
+        if(groupRepository.findByNameAndUserId(newGroupName, getUserId()).isPresent()) {
             throw new GroupAlreadyExistsException();
         }
 
@@ -176,8 +191,8 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     private Group findOrCreateGroupByName(String title) {
-        groupRepository.addGroupIfNotExists(title);
-        return groupRepository.findByName(title).orElseThrow(() -> new RuntimeException("Group Not Found"));
+        groupRepository.addGroupIfNotExists(title, getUserId());
+        return groupRepository.findByNameAndUserId(title, getUserId()).orElseThrow(() -> new RuntimeException("Group Not Found"));
     }
 
     private GroupResponse mapToGroupResponse(Group group) {

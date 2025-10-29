@@ -1,6 +1,9 @@
 package com.timstanford.bookmarkservice.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkEditRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkMoveRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkRequest;
 import com.timstanford.bookmarkservice.service.BookmarkResponse;
 import com.timstanford.bookmarkservice.service.GroupResponse;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 public interface BookmarksController {
+
     @GetMapping("/bookmarks")
     List<GroupResponse> getBookmarks();
 

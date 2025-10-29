@@ -1,4 +1,4 @@
-package com.timstanford.bookmarkservice.service;
+package com.timstanford.bookmarkservice.api.exceptions;
 
 public class BookmarkNotFoundException extends RuntimeException {
     public BookmarkNotFoundException(int id) {

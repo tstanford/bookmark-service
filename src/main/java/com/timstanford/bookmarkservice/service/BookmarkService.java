@@ -1,8 +1,8 @@
 package com.timstanford.bookmarkservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.timstanford.bookmarkservice.api.BookmarkEditRequest;
-import com.timstanford.bookmarkservice.api.BookmarkRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkEditRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkRequest;
 import com.timstanford.bookmarkservice.data.Group;
 
 import java.util.List;

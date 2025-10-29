@@ -1,0 +1,23 @@
+meta {
+  name: register
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:8080/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "tim2",
+    "password": "password"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

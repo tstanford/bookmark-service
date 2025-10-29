@@ -3,11 +3,16 @@ spring:
     url: jdbc:postgresql://localhost:5432/bookmarks
     username: bms_serviceuser
     password: UCz46Remt17nnsCD
+  security:
+    user:
+      name: admin
+      password: password
 
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+      #ddl-auto: create
 
 management:
   endpoints:
@@ -19,3 +24,11 @@ management:
   endpoint:
     health:
       show-details: always
+
+jwt:
+  secret: mysupersecurekey12345678901234567890
+
+spring.jpa.show-sql: true
+properties.hibernate.format_sql: true
+logging.level.org.hibernate.SQL: DEBUG
+logging.level.org.hibernate.type.descriptor.sql: TRACE

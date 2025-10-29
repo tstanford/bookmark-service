@@ -1,6 +1,6 @@
 package com.timstanford.bookmarkservice;
 
-import com.timstanford.bookmarkservice.api.BookmarkRequest;
+import com.timstanford.bookmarkservice.api.dtos.BookmarkRequest;
 import org.jetbrains.annotations.NotNull;
 
 public class BookmarkTestData {

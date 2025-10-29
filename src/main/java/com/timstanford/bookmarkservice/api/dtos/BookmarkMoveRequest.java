@@ -1,4 +1,4 @@
-package com.timstanford.bookmarkservice.api;
+package com.timstanford.bookmarkservice.api.dtos;
 
 public class BookmarkMoveRequest {
     private int bookmarkId;
