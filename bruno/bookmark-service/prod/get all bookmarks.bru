@@ -5,11 +5,12 @@ meta {
 }
 
 get {
-  url: http://192.168.0.30:8088/bookmarks
+  url: http://{{serviceurl}}/bookmarks
   body: none
   auth: inherit
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

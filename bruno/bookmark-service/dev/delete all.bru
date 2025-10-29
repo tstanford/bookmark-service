@@ -5,11 +5,12 @@ meta {
 }
 
 delete {
-  url: http://localhost:8080/all
+  url: http://{{serviceurl}}/all
   body: none
   auth: inherit
 }
 
 settings {
   encodeUrl: true
+  timeout: 0
 }

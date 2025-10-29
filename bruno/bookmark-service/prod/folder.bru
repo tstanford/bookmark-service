@@ -1,8 +1,16 @@
 meta {
   name: prod
-  seq: 4
+  seq: 3
 }
 
 auth {
-  mode: inherit
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+vars:pre-request {
+  serviceurl: 192.168.0.30:8088
 }

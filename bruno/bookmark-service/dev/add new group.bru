@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/group
+  url: http://{{serviceurl}}/group
   body: text
   auth: inherit
 }
@@ -16,4 +16,5 @@ body:text {
 
 settings {
   encodeUrl: true
+  timeout: 0
 }
