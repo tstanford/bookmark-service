@@ -10,15 +10,12 @@ import com.timstanford.bookmarkservice.api.exceptions.GroupAlreadyExistsExceptio
 import com.timstanford.bookmarkservice.api.exceptions.GroupNotFoundException;
 import com.timstanford.bookmarkservice.data.*;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +49,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     private int getUserId() {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        User user = userRepository.findByUsernameIgnoreCase(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
         return user.getUserId();
     }
 

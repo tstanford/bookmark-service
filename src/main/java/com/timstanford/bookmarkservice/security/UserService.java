@@ -24,13 +24,13 @@ public class UserService implements UserDetailsService {
     }
 
     public int registerUser(String username, String password) {
-        User newUser = new User(username, passwordEncoder.encode(password));
+        User newUser = new User(username.toLowerCase(), passwordEncoder.encode(password));
         return repository.save(newUser).getUserId();
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        User user = repository.findByUsername(username)
+        User user = repository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return new org.springframework.security.core.userdetails.User(username,user.getPassword(),new ArrayList<>());
