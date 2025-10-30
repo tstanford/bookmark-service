@@ -15,37 +15,37 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public interface BookmarksController {
 
-    @GetMapping("/api/bookmarks")
+    @GetMapping("/bookmarks")
     List<GroupResponse> getBookmarks();
 
-    @PostMapping("/api/bookmarks")
+    @PostMapping("/bookmarks")
     BookmarkResponse addNewBookmark(@Validated @RequestBody BookmarkRequest bookmarkRequest);
 
-    @DeleteMapping("/api/bookmarks/{id}")
+    @DeleteMapping("/bookmarks/{id}")
     void deleteBookmark(@PathVariable int id);
 
-    @PostMapping("/api/group")
+    @PostMapping("/group")
     void addNewGroup(@RequestBody String title);
 
-    @DeleteMapping("/api/group/{id}")
+    @DeleteMapping("/group/{id}")
     void deleteGroup(@PathVariable int id);
 
-    @DeleteMapping("/api/all")
+    @DeleteMapping("/all")
     void deleteAll();
 
-    @PutMapping("/api/bookmarks")
+    @PutMapping("/bookmarks")
     void editBookmark(@RequestBody BookmarkMoveRequest request);
 
-    @PutMapping("/api/bookmark/{id}")
+    @PutMapping("/bookmark/{id}")
     void editBookmark(@PathVariable int id, @RequestBody BookmarkEditRequest request);
 
-    @PutMapping("/api/group/{id}")
+    @PutMapping("/group/{id}")
     void renameGroupName(@PathVariable int id, @RequestBody String newGroupName);
 
-    @PostMapping("/api/import")
+    @PostMapping("/import")
     void importFromYaml(@RequestBody String yaml) throws JsonProcessingException;
 
-    @GetMapping(value = "/api/export")
+    @GetMapping(value = "/export")
     ResponseEntity<String> exportToYaml();
 
 }
