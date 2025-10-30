@@ -21,7 +21,8 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    private final long expirationMs = 3600000; // 1 hour
+    //private final long expirationMs = 3600000; // 1 hour
+    private final long expirationMs = 1209600000; // 2 weeks
 
     public String generateToken(Authentication authentication) {
         return Jwts.builder()
