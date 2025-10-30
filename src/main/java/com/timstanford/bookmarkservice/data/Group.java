@@ -16,7 +16,7 @@ public class Group {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "userId")
+    @Column(name = "user_id")
     private int userId;
 
     public Integer getId() {
