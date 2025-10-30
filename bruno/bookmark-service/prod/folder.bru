@@ -12,6 +12,6 @@ auth:bearer {
 }
 
 vars:pre-request {
-  old_serviceurl: https://home.timcloud.uk/api
-  serviceurl: http://192.168.0.30:8088/api
+  serviceurl: http://192.168.0.30:8088
+  ~old_serviceurl: https://home.timcloud.uk/api
 }

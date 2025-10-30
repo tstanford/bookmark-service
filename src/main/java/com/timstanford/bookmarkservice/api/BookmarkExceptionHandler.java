@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class BookmarkExceptionHandler {
 
     @ExceptionHandler(GroupNotFoundException.class)
-    public ResponseEntity<String> handleNotFoundException(GroupNotFoundException ex) {
+    public ResponseEntity<String> handleGroupNotFoundException(GroupNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(BookmarkNotFoundException.class)
-    public ResponseEntity<String> handleNotFoundException(BookmarkNotFoundException ex) {
+    public ResponseEntity<String> handleBookmarkNotFoundException(BookmarkNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 

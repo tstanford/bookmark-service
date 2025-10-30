@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{serviceurl}}/import
+  url: {{serviceurl}}/api/import
   body: text
   auth: inherit
 }
@@ -13,36 +13,100 @@ post {
 body:text {
   ---
   groups:
-    - name: Home Lab
-      bookmarks:
-        - title: Cloudflare
-          url: https://www.cloudflare.com/
-          
-        - title: Jenkins
-          url: https://jenkins.timcloud.uk
-          
-        - title: PVE
-          url: https://pve.stanford.local:8006
-          
-        - title: Nginx Proxy Manager - Admin
-          url: http://mercury:81/
-          
-        - title: Portainer
-          url: https://192.168.0.29:9443/#!/home
-          
-        - title: Wordpress
-          url: https://www.timcloud.uk/
-          
-        - title: K3S Test
-          url: https://test.timcloud.uk/
-  
-    - name: Blogs
-      bookmarks:
-        - title: Baeldung
-          url: https://www.baeldung.com/
-           
-    
-    
+  - name: 1. Home Lab
+    bookmarks:
+    - title: Cloudflare
+      url: https://www.cloudflare.com/
+    - title: Jenkins
+      url: https://jenkins.timcloud.uk
+    - title: K3S Test
+      url: https://test.timcloud.uk/
+    - title: Nginx Proxy Manager - Admin
+      url: http://mercury:81/
+    - title: Pihole
+      url: http://pi.hole
+    - title: Portainer
+      url: https://192.168.0.29:9443/#!/home
+    - title: Printer
+      url: http://printer/
+    - title: PVE
+      url: https://pve.stanford.local:8006
+    - title: Router
+      url: http://router/webpages/login.html
+    - title: Timcloud Files
+      url: https://cells.timcloud.uk/
+    - title: Wifi Access Point
+      url: http://192.168.0.119/
+    - title: Wordpress
+      url: https://www.timcloud.uk/
+  - name: 2. Dev
+    bookmarks:
+    - title: Baeldung
+      url: https://www.baeldung.com/
+    - title: Copilot
+      url: https://copilot.microsoft.com/chats/XJwC5ZTrG2wqWPGzfqEtC
+    - title: Dockerhub
+      url: https://hub.docker.com/repositories/tjstanford
+    - title: Eleventy
+      url: https://www.11ty.dev/
+    - title: Github
+      url: https://github.com/
+  - name: 3. Media
+    bookmarks:
+    - title: Pirate Bay
+      url: https://thepiratebay.org
+    - title: Youtube
+      url: http://youtube.com
+    - title: Youtube Music
+      url: https://music.youtube.com/
+  - name: Entertainment
+    bookmarks:
+    - title: Odeon
+      url: https://www.odeon.co.uk/
+    - title: Vue
+      url: https://www.myvue.com/
+  - name: Finance
+    bookmarks:
+    - title: Bank of Scotland
+      url: https://online.bankofscotland.co.uk/personal/logon/login.jsp
+    - title: Halifax
+      url: https://www.halifax-online.co.uk/personal/logon/login.jsp
+    - title: RBS Digital Banking
+      url: https://www.digitalbanking.rbs.co.uk
+  - name: News
+    bookmarks:
+    - title: BBC News
+      url: http://news.bbc.co.uk
+    - title: Sky News
+      url: http://news.sky.com
+  - name: Public Services
+    bookmarks:
+    - title: Book Recycling Centre Visit
+      url: https://selfservice-fife.servicebuilder.co.uk/renderform?t=1&k=095C78B060236F21F2EAE2A93900EA822C9825AF
+    - title: School Holidays
+      url: https://www.fife.gov.uk/closures/school-holidays
+  - name: Shopping
+    bookmarks:
+    - title: Amazon
+      url: http://amazon.com
+    - title: Scan
+      url: http://scan.co.uk
+  - name: Social Media
+    bookmarks:
+    - title: Facebook
+      url: http://www.facebook.com
+  - name: Software
+    bookmarks:
+    - title: Friction
+      url: https://friction.graphics/
+    - title: Gimp
+      url: https://www.gimp.org/
+    - title: Glaxnimate
+      url: https://glaxnimate.org/
+    - title: Inkscape
+      url: https://inkscape.org/
+    - title: Kdenlive
+      url: https://kdenlive.org/
   
 }
 
