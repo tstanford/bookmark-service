@@ -3,7 +3,7 @@ package com.timstanford.bookmarkservice.data;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="[Group", indexes = {
+@Table(name="[Group]", indexes = {
         @Index(name = "uniqueIndex", columnList = "name,userId", unique = true)
 })
 public class Group {
