@@ -1,0 +1,41 @@
+meta {
+  name: Add bookmark
+  type: http
+  seq: 6
+}
+
+post {
+  url: https://home.timcloud.uk/api/bookmarks
+  body: json
+  auth: inherit
+}
+
+headers {
+  User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0
+  Accept: */*
+  Accept-Language: en-US,en;q=0.5
+  Accept-Encoding: gzip, deflate, br, zstd
+  Referer: https://home.timcloud.uk/
+  Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0aW0iLCJpYXQiOjE3NjE4NTc2MTUsImV4cCI6MTc2MzA2NzIxNX0.d8chB94Xzx9GVZBWuthjVE2RDr1jg4BhKgM5GQzmhGc
+  Content-type: application/json; charset=UTF-8
+  Origin: https://home.timcloud.uk
+  Connection: keep-alive
+  Cookie: cf_clearance=bKXP0gVQCsFb_dB7l.VWsDUx5HMx1oTeINjSf6zZ6bo-1759098068-1.2.1.1-mSg0iCjOnXyLBO6n3w4fVtkTAhRDHmapP6o4RSZ.iLYR5ml_oXmxklFo3dfp.ydOicXmdXio5TYwWpY1EQ8ceAdU7uR5oMiaac66sKOlTLussk7Y7MxxuQq_p6TPsZ5QRuhQnUEsQpj0HZIybUkzzQfnoNINfgFmNJy7QkxEDCqWiLA7JPxMhCtz0ApdWU_lZiUDWW1xl0zqGYhUgtRbt6YrSmBXw9TnYLtQOKI2m2U
+  Sec-Fetch-Dest: empty
+  Sec-Fetch-Mode: cors
+  Sec-Fetch-Site: same-origin
+  Priority: u=0
+}
+
+body:json {
+  {
+    "title": "Facebook",
+    "url": "http://www.facebook.com",
+    "groupName": "test1"
+  }
+}
+
+settings {
+  encodeUrl: false
+  timeout: 0
+}

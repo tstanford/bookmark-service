@@ -50,7 +50,6 @@ public class BookmarkServiceImpl implements BookmarkService {
         this.yamlMapper = yamlMapper;
     }
 
-    @Cacheable("userid")
     private int getUserId() {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));

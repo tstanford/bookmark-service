@@ -3,7 +3,9 @@ package com.timstanford.bookmarkservice.data;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "[Group]", indexes = @Index(columnList = "name"))
+@Table(name="[Group", indexes = {
+        @Index(name = "uniqueIndex", columnList = "name,userId", unique = true)
+})
 public class Group {
 
     @Id
@@ -14,6 +16,7 @@ public class Group {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "userId")
     private int userId;
 
     public Integer getId() {
