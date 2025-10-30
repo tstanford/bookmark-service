@@ -28,7 +28,7 @@ public class AuthenticationController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     public ResponseEntity<String> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -37,7 +37,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     public ResponseEntity<Integer> registerNewUser(@RequestBody LoginRequest loginRequest) {
         int userId = userService.registerUser(loginRequest.getUsername(), loginRequest.getPassword());
 

@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/manage/health")
+                        .requestMatchers("/api/login", "/api/register", "/manage/health")
                         .permitAll() // Public endpoints
                         .anyRequest().authenticated()) // Secure all other endpoints
                 .formLogin(AbstractHttpConfigurer::disable)

@@ -1,5 +1,5 @@
 meta {
-  name: dev
+  name: local
   seq: 2
 }
 
@@ -12,5 +12,6 @@ auth:bearer {
 }
 
 vars:pre-request {
-  serviceurl: localhost:8080
+  old_serviceurl: https://home.timcloud.uk/api
+  serviceurl: http://localhost:8080/api
 }

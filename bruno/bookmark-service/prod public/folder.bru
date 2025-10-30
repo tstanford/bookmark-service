@@ -1,0 +1,17 @@
+meta {
+  name: prod public
+  seq: 4
+}
+
+auth {
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+vars:pre-request {
+  old_serviceurl: 192.168.0.30:8088
+  serviceurl: https://home.timcloud.uk/api
+}

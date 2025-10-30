@@ -1,13 +1,13 @@
 meta {
-  name: health endpoint
+  name: get all bookmarks
   type: http
-  seq: 4
+  seq: 1
 }
 
 get {
-  url: http://{{serviceurl}}/manage/health
+  url: {{serviceurl}}/bookmarks
   body: none
-  auth: none
+  auth: inherit
 }
 
 settings {

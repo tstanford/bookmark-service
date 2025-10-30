@@ -5,14 +5,14 @@ meta {
 }
 
 post {
-  url: http://{{serviceurl}}/login
+  url: {{serviceurl}}/login
   body: json
   auth: none
 }
 
 body:json {
   {
-    "username": "tim2",
+    "username": "tim",
     "password": "password"
   }
 }

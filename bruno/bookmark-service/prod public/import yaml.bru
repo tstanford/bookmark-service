@@ -1,11 +1,11 @@
 meta {
-  name: export yaml
+  name: import yaml
   type: http
-  seq: 6
+  seq: 3
 }
 
-get {
-  url: http://{{serviceurl}}/export
+post {
+  url: {{serviceurl}}/import
   body: text
   auth: inherit
 }
