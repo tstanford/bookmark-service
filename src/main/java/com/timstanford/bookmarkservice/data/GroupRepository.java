@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface GroupRepository extends JpaRepository<Group, Integer> {
     Optional<Group> findByNameAndUserId(String groupName, int userId);
 
-    @Query(value = "insert into \"group\" (name, user_id) values (?1, ?2) on conflict do nothing;", nativeQuery = true)
+    @Query(value = "insert into \"group\" (name, userId) values (?1, ?2) on conflict do nothing;", nativeQuery = true)
     @Modifying
     void addGroupIfNotExists(String name, int userId);
 
