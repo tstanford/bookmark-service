@@ -39,6 +39,11 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
+    public void addNewGroup(GroupMoveRequest request) {
+        bookmarkService.moveGroup(request.getSourceGroupId(), request.getTargetGroupId());
+    }
+
+    @Override
     public void deleteGroup(int id) {
         bookmarkService.deleteGroup(id);
     }

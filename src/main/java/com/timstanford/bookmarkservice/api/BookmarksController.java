@@ -27,6 +27,9 @@ public interface BookmarksController {
     @PostMapping("/api/group")
     void addNewGroup(@RequestBody String title);
 
+    @PutMapping("/api/group")
+    void addNewGroup(@RequestBody GroupMoveRequest request);
+
     @DeleteMapping("/api/group/{id}")
     void deleteGroup(@PathVariable int id);
 
