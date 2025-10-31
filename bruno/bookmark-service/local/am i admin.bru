@@ -1,13 +1,13 @@
 meta {
-  name: health endpoint
+  name: am i admin
   type: http
-  seq: 6
+  seq: 13
 }
 
 get {
-  url: {{serviceurl}}/manage/health
+  url: {{serviceurl}}/api/admin/amiadmin
   body: none
-  auth: none
+  auth: inherit
 }
 
 settings {

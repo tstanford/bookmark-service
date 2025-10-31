@@ -7,13 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("/api")
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -28,7 +26,7 @@ public class AuthenticationController {
         this.userService = userService;
     }
 
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public ResponseEntity<String> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -37,7 +35,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/api/register")
+    @PostMapping("/register")
     public ResponseEntity<Integer> registerNewUser(@RequestBody LoginRequest loginRequest) {
         int userId = userService.registerUser(loginRequest.getUsername(), loginRequest.getPassword());
 
