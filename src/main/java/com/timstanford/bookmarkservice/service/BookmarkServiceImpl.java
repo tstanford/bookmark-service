@@ -55,7 +55,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     public List<GroupResponse> getAllBookmarks() {
-        List<GroupResponse> groups = groupRepository.findAllByUserIdOrderByName(getUserId())
+        List<GroupResponse> groups = groupRepository.findAllByUserIdOrderByPosition(getUserId())
                 .stream()
                 .map(this::mapToGroupResponse)
                 .collect(Collectors.toList());
@@ -99,7 +99,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     @Transactional
     public void deleteAll(){
-        var groups = groupRepository.findAllByUserIdOrderByName(getUserId());
+        var groups = groupRepository.findAllByUserIdOrderByPosition(getUserId());
         groups.forEach(group -> bookmarksRepository.deleteAllByGroupId(group.getId()));
         groupRepository.deleteAllByUserId(getUserId());
     }
@@ -180,6 +180,33 @@ public class BookmarkServiceImpl implements BookmarkService {
         bookmark.setUrl(request.getUrl());
 
         bookmarksRepository.save(bookmark);
+    }
+
+    @Override
+    @Transactional
+    public void moveGroup(int sourceGroupId, int targetGroupId) {
+        var groups = groupRepository.findAllByUserIdOrderByPosition(getUserId());
+
+        //take out sourceGroupId
+        Group sourceGroup = groups.stream()
+                .filter(g -> g.getId() == sourceGroupId)
+                .findFirst().orElseThrow(() -> new GroupNotFoundException(sourceGroupId));
+
+        groups.remove(sourceGroup);
+
+        //insert source group to target groups location and move target group position + 1
+        int counter = 0;
+        List<Group> reordered = new ArrayList<>();
+        for(var group : groups) {
+            if(group.getId() == targetGroupId)  {
+                sourceGroup.setPosition(counter++);
+                reordered.add(sourceGroup);
+            }
+            group.setPosition(counter++);
+            reordered.add(group);
+        };
+
+        groupRepository.saveAll(reordered);
     }
 
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {

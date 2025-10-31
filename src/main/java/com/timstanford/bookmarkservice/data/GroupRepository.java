@@ -16,7 +16,7 @@ public interface GroupRepository extends JpaRepository<Group, Integer> {
     @Modifying
     void addGroupIfNotExists(String name, int userId);
 
-    List<Group> findAllByUserIdOrderByName(int userId);
+    List<Group> findAllByUserIdOrderByPosition(int userId);
 
     void deleteAllByUserId(int userId);
 }

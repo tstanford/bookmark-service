@@ -29,4 +29,6 @@ public interface BookmarkService {
     String export() throws JsonProcessingException;
 
     void editBookmark(int id, BookmarkEditRequest request);
+
+    void moveGroup(int sourceGroupId, int targetGroupId);
 }
