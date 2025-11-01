@@ -1,0 +1,16 @@
+meta {
+  name: am i admin
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{serviceurl}}/api/admin/amiadmin
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

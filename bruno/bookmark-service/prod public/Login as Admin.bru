@@ -1,0 +1,27 @@
+meta {
+  name: Login as Admin
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{serviceurl}}/api/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "admin",
+    "password": "admin123"
+  }
+}
+
+script:post-response {
+  bru.setVar("token", res.getBody())
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
