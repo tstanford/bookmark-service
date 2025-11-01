@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public interface BookmarksController {
 
     @GetMapping("/bookmarks")
