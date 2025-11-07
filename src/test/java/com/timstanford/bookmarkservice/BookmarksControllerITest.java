@@ -9,17 +9,15 @@ import com.timstanford.bookmarkservice.security.UserService;
 import com.timstanford.bookmarkservice.service.BookmarkService;
 import com.timstanford.bookmarkservice.service.FaviconDownloader;
 import com.timstanford.bookmarkservice.service.GroupResponse;
-import org.jetbrains.annotations.Nullable;
+import com.timstanford.bookmarkservice.utils.WebClientHelper;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.List;
@@ -58,7 +56,7 @@ public class BookmarksControllerITest {
     @Autowired
     private UserService userService;
 
-    private String token;
+    private WebClientHelper webClientHelper;
 
     @DynamicPropertySource
     static void setProperties(DynamicPropertyRegistry registry) {
@@ -84,6 +82,7 @@ public class BookmarksControllerITest {
 
     @BeforeEach
     public void beforeEach() throws Exception {
+        webClientHelper = new WebClientHelper("http://localhost:"+portNumber);
         userService.registerUser(USERNAME, PASSWORD);
 
         String payload = """
@@ -93,53 +92,10 @@ public class BookmarksControllerITest {
                 }
                 """.formatted(USERNAME, PASSWORD);
 
-        ResponseEntity<String> result = postString("/api/login", payload);
-
+        ResponseEntity<String> result = webClientHelper.postString("/api/login", payload);
         assertNotNull(result);
-        token = result.getBody();
-    }
 
-    private @Nullable ResponseEntity<String> postString(String url, String payload) {
-        WebClient webClient = WebClient.create("http://localhost:" + portNumber + url);
-        ResponseEntity<String> result = webClient.post()
-                .bodyValue(payload)
-                .header("Content-Type", "application/json")
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return result;
-    }
-
-    private @Nullable ResponseEntity<String> postStringWithAuth(String url, String payload) {
-        WebClient webClient = WebClient.create("http://localhost:" + portNumber + url);
-        ResponseEntity<String> result = webClient.post()
-                .bodyValue(payload)
-                .header("Content-Type", "application/json")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return result;
-    }
-
-    private @Nullable ResponseEntity<String> getString(String url) {
-        WebClient webClient = WebClient.create("http://localhost:" + portNumber + url);
-        ResponseEntity<String> result = webClient.get()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return result;
-    }
-
-    private @Nullable ResponseEntity<String> delete(String url) {
-        WebClient webClient = WebClient.create("http://localhost:" + portNumber + url);
-        ResponseEntity<String> result = webClient.delete()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer "+token)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return result;
+        webClientHelper.setToken(result.getBody());
     }
 
     @Test
@@ -156,7 +112,7 @@ public class BookmarksControllerITest {
         }
         """.formatted(title, url, groupName);
 
-        postStringWithAuth("/api/bookmarks", payload);
+        webClientHelper.postStringWithAuth("/api/bookmarks", payload);
     }
 
     @Test
@@ -166,11 +122,11 @@ public class BookmarksControllerITest {
         addBookmark("Charlie Site", "http://www.charlie.com", "two");
         addBookmark("Delta Site", "http://www.delta.com", "two");
 
-        var deleteResult = delete("/api/all");
+        var deleteResult = webClientHelper.delete("/api/all");
 
         assertTrue(deleteResult.getStatusCode().is2xxSuccessful());
 
-        ResponseEntity<String> getResults = getString("/api/bookmarks");
+        ResponseEntity<String> getResults = webClientHelper.getString("/api/bookmarks");
         assertTrue(getResults.getStatusCode().is2xxSuccessful());
         assertNotNull(getResults);
 
@@ -185,7 +141,7 @@ public class BookmarksControllerITest {
         addBookmark("Charlie Site", "http://www.charlie.com", "two");
         addBookmark("Delta Site", "http://www.delta.com", "two");
 
-        ResponseEntity<String> getResult = getString("/api/bookmarks");
+        ResponseEntity<String> getResult = webClientHelper.getString("/api/bookmarks");
         assertTrue(getResult.getStatusCode().is2xxSuccessful());
 
         List<GroupResponse> groups = objectMapper.readValue(getResult.getBody(), new TypeReference<>() {});
@@ -201,7 +157,7 @@ public class BookmarksControllerITest {
     public void importFromYamlFile() throws Exception {
         var importFile = new String(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("importfile.yml")).readAllBytes());
 
-        ResponseEntity<String> postResult = postStringWithAuth("/api/import", importFile);
+        ResponseEntity<String> postResult = webClientHelper.postStringWithAuth("/api/import", importFile);
         assertTrue(postResult.getStatusCode().is2xxSuccessful());
 
         var groups = groupRepository.findAll();
@@ -217,13 +173,13 @@ public class BookmarksControllerITest {
     @Test
     void deleteBookmark() throws Exception {
         addBookmark("Alpha Site", "http://www.alpha.com", "one");
-        var result = Objects.requireNonNull(getString("/api/bookmarks")).getBody();
+        var result = Objects.requireNonNull(webClientHelper.getString("/api/bookmarks")).getBody();
         List<GroupResponse> groups = objectMapper.readValue(result, new TypeReference<>() {});
         var id = groups.get(0).getBookmarks().get(0).getId();
 
-        delete("/api/bookmarks/"+id);
+        webClientHelper.delete("/api/bookmarks/"+id);
 
-        var getResult2 = Objects.requireNonNull(getString("/api/bookmarks")).getBody();
+        var getResult2 = Objects.requireNonNull(webClientHelper.getString("/api/bookmarks")).getBody();
         List<GroupResponse> groups2 = objectMapper.readValue(getResult2, new TypeReference<>() {
         });
 
