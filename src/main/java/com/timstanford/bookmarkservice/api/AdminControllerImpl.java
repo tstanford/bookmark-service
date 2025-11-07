@@ -1,6 +1,5 @@
 package com.timstanford.bookmarkservice.api;
 
-import com.timstanford.bookmarkservice.data.User;
 import com.timstanford.bookmarkservice.data.UserRepository;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +14,7 @@ public class AdminControllerImpl implements AdminController {
     }
 
     @Override
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserWithStats> getUsers() {
+        return userRepository.findAllUsersWithStats();
     }
 }

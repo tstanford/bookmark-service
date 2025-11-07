@@ -131,7 +131,6 @@ public class BookmarksControllerITest {
         assertNotNull(getResults);
 
         assertEquals("[]", getResults.getBody());
-
     }
 
     @Test
