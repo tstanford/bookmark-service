@@ -1,14 +1,19 @@
 package com.timstanford.bookmarkservice.api;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*")
 public interface AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/users")
-    Object getUsers();
+    List<UserWithStats> getUsers();
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/user")
+    ResponseEntity<Integer> registerNewUser(@RequestBody NewUserRequest newUserRequest);
 }

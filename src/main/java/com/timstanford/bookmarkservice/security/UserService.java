@@ -25,8 +25,8 @@ public class UserService implements UserDetailsService {
         this.repository = repository;
     }
 
-    public int registerUser(String username, String password) {
-        User newUser = new User(username.toLowerCase(), passwordEncoder.encode(password));
+    public int registerUser(String username, String email, String password) {
+        User newUser = new User(username.toLowerCase(), email, passwordEncoder.encode(password));
         return repository.save(newUser).getUserId();
     }
 

@@ -5,14 +5,15 @@ meta {
 }
 
 post {
-  url: {{serviceurl}}/api/register
+  url: {{serviceurl}}/api/admin/user
   body: json
-  auth: none
+  auth: inherit
 }
 
 body:json {
   {
     "username": "tim5",
+    "emailAddress": "tim@tim.com",
     "password": "password"
   }
 }

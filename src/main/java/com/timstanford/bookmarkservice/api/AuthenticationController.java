@@ -34,12 +34,4 @@ public class AuthenticationController {
         String token = jwtService.generateToken(authentication);
         return ResponseEntity.ok(token);
     }
-
-    @PostMapping("/register")
-    public ResponseEntity<Integer> registerNewUser(@RequestBody LoginRequest loginRequest) {
-        int userId = userService.registerUser(loginRequest.getUsername(), loginRequest.getPassword());
-
-        return ResponseEntity.ok(userId);
-    }
-
 }

@@ -30,6 +30,7 @@ public class BookmarksControllerITest {
 
     static final String USERNAME = "tim";
     static final String PASSWORD = "password";
+    static final String EMAIL = "tim@tim.com";
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
     
     @LocalServerPort
@@ -83,7 +84,7 @@ public class BookmarksControllerITest {
     @BeforeEach
     public void beforeEach() throws Exception {
         webClientHelper = new WebClientHelper("http://localhost:"+portNumber);
-        userService.registerUser(USERNAME, PASSWORD);
+        userService.registerUser(USERNAME, EMAIL, PASSWORD);
 
         String payload = """
                 {
