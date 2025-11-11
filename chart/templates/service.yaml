@@ -11,4 +11,4 @@ spec:
       port: 8088
       targetPort: {{ .Values.bookmarkService.port }}
   type: LoadBalancer
-  loadBalancerIP: 192.168.1.32
+  #loadBalancerIP: 192.168.1.32
