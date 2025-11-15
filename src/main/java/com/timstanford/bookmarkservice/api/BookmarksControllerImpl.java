@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class BookmarksControllerImpl implements BookmarksController {
@@ -51,6 +52,11 @@ public class BookmarksControllerImpl implements BookmarksController {
     @Override
     public void deleteBookmark(int id) {
         bookmarkService.deleteBookmark(id);
+    }
+
+    @Override
+    public void updateIcon(int id, Optional<String> data) {
+        bookmarkService.updateIcon(id, data);
     }
 
     @Override

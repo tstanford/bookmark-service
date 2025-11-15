@@ -6,6 +6,7 @@ import com.timstanford.bookmarkservice.api.dtos.BookmarkRequest;
 import com.timstanford.bookmarkservice.data.Group;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookmarkService {
     List<GroupResponse> getAllBookmarks();
@@ -31,4 +32,6 @@ public interface BookmarkService {
     void editBookmark(int id, BookmarkEditRequest request);
 
     void moveGroup(int sourceGroupId, int targetGroupId);
+
+    void updateIcon(int id, Optional<String> data);
 }

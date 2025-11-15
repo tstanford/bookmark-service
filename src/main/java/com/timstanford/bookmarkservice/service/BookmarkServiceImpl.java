@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.timstanford.bookmarkservice.service.Constants.DEFAULT_ICON;
@@ -207,6 +209,18 @@ public class BookmarkServiceImpl implements BookmarkService {
         };
 
         groupRepository.saveAll(reordered);
+    }
+
+    @Override
+    public void updateIcon(int id, Optional<String> data) {
+        Bookmark bookmark = bookmarksRepository.findById(id).orElseThrow(() -> new BookmarkNotFoundException(id));
+
+        if(data.isPresent()){
+            bookmark.setFavicon(data.get());
+            bookmarksRepository.save(bookmark);
+        } else {
+            faviconDownloader.updateFavicon(id, bookmark.getUrl());
+        }
     }
 
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {

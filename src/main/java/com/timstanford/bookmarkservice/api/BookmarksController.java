@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
@@ -24,6 +25,9 @@ public interface BookmarksController {
 
     @DeleteMapping("/bookmarks/{id}")
     void deleteBookmark(@PathVariable int id);
+
+    @PutMapping("/bookmarks/icon/{id}")
+    void updateIcon(@PathVariable int id, @RequestBody Optional<String> data);
 
     @PostMapping("/group")
     void addNewGroup(@RequestBody String title);
