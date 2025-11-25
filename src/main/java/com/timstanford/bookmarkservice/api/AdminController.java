@@ -16,4 +16,8 @@ public interface AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/user")
     ResponseEntity<Integer> registerNewUser(@RequestBody NewUserRequest newUserRequest);
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/user/{id}")
+    ResponseEntity<Void> updateUser(@PathVariable int id, @RequestBody UpdateUserRequest request);
 }

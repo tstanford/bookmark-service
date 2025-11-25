@@ -1,5 +1,6 @@
 package com.timstanford.bookmarkservice.security;
 
+import com.timstanford.bookmarkservice.api.UserNotFoundException;
 import com.timstanford.bookmarkservice.data.User;
 import com.timstanford.bookmarkservice.data.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,6 +29,13 @@ public class UserService implements UserDetailsService {
     public int registerUser(String username, String email, String password) {
         User newUser = new User(username.toLowerCase(), email, passwordEncoder.encode(password));
         return repository.save(newUser).getUserId();
+    }
+
+    public void updateUser(int id, String email, String password) {
+        User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        user.setPassword(passwordEncoder.encode(password));
+        user.setEmailAddress(email);
+        repository.save(user);
     }
 
     @Override

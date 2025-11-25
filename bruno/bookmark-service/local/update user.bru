@@ -1,0 +1,23 @@
+meta {
+  name: update user
+  type: http
+  seq: 14
+}
+
+put {
+  url: {{serviceurl}}/api/admin/user/202
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "emailAddress": "tim@stanford.com",
+    "password": "mysecretpassword"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
