@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -33,7 +34,9 @@ public class UserService implements UserDetailsService {
 
     public void updateUser(int id, String email, String password) {
         User user = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-        user.setPassword(passwordEncoder.encode(password));
+        if (password != null) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
         user.setEmailAddress(email);
         repository.save(user);
     }
