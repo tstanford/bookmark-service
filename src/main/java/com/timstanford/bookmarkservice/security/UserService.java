@@ -58,4 +58,8 @@ public class UserService implements UserDetailsService {
 
         return new org.springframework.security.core.userdetails.User(username,user.getPassword(), authorityList);
     }
+
+    public void deleteUser(int id) {
+        repository.deleteById(id);
+    }
 }

@@ -101,9 +101,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Override
     @Transactional
     public void deleteAll(){
-        var groups = groupRepository.findAllByUserIdOrderByPosition(getUserId());
-        groups.forEach(group -> bookmarksRepository.deleteAllByGroupId(group.getId()));
-        groupRepository.deleteAllByUserId(getUserId());
+        deleteAllForUser(getUserId());
     }
 
     @Override
@@ -221,6 +219,13 @@ public class BookmarkServiceImpl implements BookmarkService {
         } else {
             faviconDownloader.updateFavicon(id, bookmark.getUrl());
         }
+    }
+
+    @Override
+    public void deleteAllForUser(int id) {
+        var groups = groupRepository.findAllByUserIdOrderByPosition(id);
+        groups.forEach(group -> bookmarksRepository.deleteAllByGroupId(group.getId()));
+        groupRepository.deleteAllByUserId(id);
     }
 
     private Group findOrCreateGroupByName(BookmarkRequest bookmarkRequest) {

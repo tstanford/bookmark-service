@@ -34,4 +34,6 @@ public interface BookmarkService {
     void moveGroup(int sourceGroupId, int targetGroupId);
 
     void updateIcon(int id, Optional<String> data);
+
+    void deleteAllForUser(int id);
 }

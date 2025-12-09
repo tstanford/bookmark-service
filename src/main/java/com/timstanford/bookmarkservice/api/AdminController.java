@@ -20,4 +20,8 @@ public interface AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/user/{id}")
     ResponseEntity<Void> updateUser(@PathVariable int id, @RequestBody UpdateUserRequest request);
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/user/{id}")
+    ResponseEntity<Void> deleteUser(int id);
 }
