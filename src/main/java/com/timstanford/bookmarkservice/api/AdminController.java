@@ -23,5 +23,5 @@ public interface AdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/user/{id}")
-    ResponseEntity<Void> deleteUser(int id);
+    ResponseEntity<Void> deleteUser(@PathVariable int id);
 }
