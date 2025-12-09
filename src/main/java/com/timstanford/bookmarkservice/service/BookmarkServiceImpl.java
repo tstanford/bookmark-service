@@ -222,6 +222,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
+    @Transactional
     public void deleteAllForUser(int id) {
         var groups = groupRepository.findAllByUserIdOrderByPosition(id);
         groups.forEach(group -> bookmarksRepository.deleteAllByGroupId(group.getId()));

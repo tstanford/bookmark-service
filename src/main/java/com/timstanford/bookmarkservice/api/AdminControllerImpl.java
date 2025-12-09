@@ -39,7 +39,6 @@ public class AdminControllerImpl implements AdminController {
     }
 
     @Override
-    @Transactional
     public ResponseEntity<Void> deleteUser(int id) {
         bookmarkService.deleteAllForUser(id);
         userService.deleteUser(id);
