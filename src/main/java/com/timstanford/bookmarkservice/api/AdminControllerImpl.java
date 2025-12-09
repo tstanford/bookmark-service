@@ -4,6 +4,7 @@ import com.timstanford.bookmarkservice.data.UserRepository;
 import com.timstanford.bookmarkservice.security.UserService;
 import com.timstanford.bookmarkservice.service.BookmarkService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +39,7 @@ public class AdminControllerImpl implements AdminController {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Void> deleteUser(int id) {
         bookmarkService.deleteAllForUser(id);
         userService.deleteUser(id);
