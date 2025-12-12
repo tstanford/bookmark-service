@@ -12,6 +12,10 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByUsernameIgnoreCase(String username);
 
-    @Query(value = "select u.user_id as userId, u.username as username, u.email_address as emailAddress, count(b.*) as bookmarkCount from \"user\" as u left join \"group\" as g on g.user_id = u.user_id left join bookmarks as b on b.group_id = g.id group by u.user_id, u.username;", nativeQuery = true)
+    @Query(value = "select u.user_id as userId, u.username as username, u.email_address as emailAddress, u.is_admin as isAdmin, count(b.*) as bookmarkCount \n" +
+            "from \"user\" as u \n" +
+            "left join \"group\" as g on g.user_id = u.user_id \n" +
+            "left join bookmarks as b on b.group_id = g.id \n" +
+            "group by u.user_id, u.username;", nativeQuery = true)
     List<UserWithStats> findAllUsersWithStats();
 }

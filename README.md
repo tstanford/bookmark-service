@@ -39,4 +39,8 @@ delete from "group" where user_id in (
 
 -- delete user
 delete from "user" where username = 'bob'
+
+-- get all users
+select u.user_id as userId, u.username as username, u.email_address as emailAddress, count(b.*) as bookmarkCount from "user" as u left join "group" as g on g.user_id = u.user_id left join bookmarks as b on b.group_id = g.id group by u.user_id, u.username;
+
 ```

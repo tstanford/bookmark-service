@@ -7,5 +7,7 @@ public interface UserWithStats {
 
     String getEmailAddress();
 
+    boolean getIsAdmin();
+
     long getBookmarkCount();
 }
