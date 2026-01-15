@@ -1,0 +1,16 @@
+meta {
+  name: get email
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{serviceurl}}/api/getemail
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
