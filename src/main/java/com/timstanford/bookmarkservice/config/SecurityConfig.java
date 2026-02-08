@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/register", "/manage/health")
+                        .requestMatchers("/api/login", "api/refresh", "/api/register", "/manage/health")
                         .permitAll() // Public endpoints
                         .anyRequest().authenticated()) // Secure all other endpoints
                 .exceptionHandling(exception -> exception
