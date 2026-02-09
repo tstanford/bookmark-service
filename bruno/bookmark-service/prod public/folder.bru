@@ -1,6 +1,5 @@
 meta {
   name: prod public
-  seq: 6
 }
 
 auth {
@@ -8,7 +7,7 @@ auth {
 }
 
 auth:bearer {
-  token: {{token}}
+  token: {{authToken}}
 }
 
 vars:pre-request {

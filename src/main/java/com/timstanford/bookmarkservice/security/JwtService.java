@@ -1,6 +1,7 @@
 package com.timstanford.bookmarkservice.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,23 +15,39 @@ import java.util.Date;
 @Service
 public class JwtService {
 
+    private static final long MILLSECONDS_IN_A_DAY = 86400000;
+
     @Value("${jwt.secret}")
     private String secret;
+
+    @Value("${jwt.refresh-token-expiration-days:90}")
+    private long refreshTokenExpirationDays;
+
+    @Value("${jwt.auth-token-expiration-days:14}")
+    private long authTokenExpirationDays;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    //private final long expirationMs = 3600000; // 1 hour
-    private final long expirationMs = 1209600000; // 2 weeks
-
     public String generateToken(Authentication authentication) {
+        return generateToken(authentication, authTokenExpirationDays * MILLSECONDS_IN_A_DAY)
+                .setHeaderParam("TokenType", "Auth")
+                .compact();
+    }
+
+    public String generateRefreshToken(Authentication authentication) {
+        return generateToken(authentication, refreshTokenExpirationDays * MILLSECONDS_IN_A_DAY)
+                .setHeaderParam("TokenType", "Refresh")
+                .compact();
+    }
+
+    private JwtBuilder generateToken(Authentication authentication, long expiration) {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-                .signWith(getSigningKey())
-                .compact();
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey());
     }
 
     public String extractUsername(String token) {
@@ -42,8 +59,30 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractAllClaims(token).getExpiration().before(new Date());
+    }
+
+    public boolean isRefreshToken(String token) {
+        var type = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parse(token)
+                .getHeader()
+                .get("TokenType")
+                .toString();
+        return type.equals("Refresh");
+    }
+
+    public boolean isAuthToken(String token) {
+        var type = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parse(token)
+                .getHeader()
+                .get("TokenType")
+                .toString();
+        return type.equals("Auth");
     }
 
     private Claims extractAllClaims(String token) {
@@ -53,6 +92,5 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 
 }

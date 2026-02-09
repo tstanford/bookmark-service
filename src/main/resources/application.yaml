@@ -27,6 +27,8 @@ management:
 
 jwt:
   secret: mysupersecurekey12345678901234567890
+  refresh-token-expiration-days: 90 # 3 months
+  auth-token-expiration-days: 14  #2 weeks
 
 spring.jpa.show-sql: true
 properties.hibernate.format_sql: true

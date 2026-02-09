@@ -1,0 +1,24 @@
+meta {
+  name: refresh token
+  type: http
+  seq: 16
+}
+
+post {
+  url: {{serviceurl}}/api/refresh
+  body: json
+  auth: none
+}
+
+body:json {
+  {{authToken}}
+}
+
+script:post-response {
+  bru.setVar("token", res.getBody())
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
