@@ -15,27 +15,29 @@ import java.util.Date;
 @Service
 public class JwtService {
 
+    private static final long MILLSECONDS_IN_A_DAY = 86400000;
+
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.refresh-token-expiration-ms:}")
-    private long refreshTokenExpirationMs;
+    @Value("${jwt.refresh-token-expiration-days:90}")
+    private long refreshTokenExpirationDays;
 
-    @Value("${jwt.auth-token-expiration-ms:1209600000}")
-    private long authTokenExpirationMs;
+    @Value("${jwt.auth-token-expiration-days:14}")
+    private long authTokenExpirationDays;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
     public String generateToken(Authentication authentication) {
-        return generateToken(authentication, authTokenExpirationMs)
+        return generateToken(authentication, authTokenExpirationDays * MILLSECONDS_IN_A_DAY)
                 .setHeaderParam("TokenType", "Auth")
                 .compact();
     }
 
     public String generateRefreshToken(Authentication authentication) {
-        return generateToken(authentication, refreshTokenExpirationMs)
+        return generateToken(authentication, refreshTokenExpirationDays * MILLSECONDS_IN_A_DAY)
                 .setHeaderParam("TokenType", "Refresh")
                 .compact();
     }
