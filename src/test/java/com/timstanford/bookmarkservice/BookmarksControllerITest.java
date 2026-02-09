@@ -10,14 +10,15 @@ import com.timstanford.bookmarkservice.service.BookmarkService;
 import com.timstanford.bookmarkservice.service.FaviconDownloader;
 import com.timstanford.bookmarkservice.service.GroupResponse;
 import com.timstanford.bookmarkservice.utils.WebClientHelper;
+import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class BookmarksControllerITest {
     @LocalServerPort
     int portNumber; 
     
-    @MockBean
+    @MockitoBean
     FaviconDownloader faviconDownloader;
 
     @Autowired
@@ -96,7 +97,10 @@ public class BookmarksControllerITest {
         ResponseEntity<String> result = webClientHelper.postString("/api/login", payload);
         assertNotNull(result);
 
-        webClientHelper.setToken(result.getBody());
+        JSONObject jsonObj = new JSONObject(result.getBody());
+        var token = jsonObj.getString("authToken");
+
+        webClientHelper.setToken(token);
     }
 
     @Test
