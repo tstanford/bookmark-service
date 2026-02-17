@@ -11,11 +11,12 @@ post {
 }
 
 body:json {
-  {{authToken}}
+  {{refreshToken}}
 }
 
 script:post-response {
-  bru.setVar("token", res.getBody())
+  bru.setVar("authToken", res.getBody()["authToken"])
+  bru.setVar("refreshToken", res.getBody()["refreshToken"])
 }
 
 settings {

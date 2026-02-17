@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@Table(name="[Group]", indexes = {
+@Table(name="[group]", indexes = {
         @Index(name = "uniqueIndex", columnList = "name,userId", unique = true)
 })
 public class Group {

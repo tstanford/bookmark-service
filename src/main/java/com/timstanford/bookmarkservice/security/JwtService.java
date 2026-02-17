@@ -31,13 +31,13 @@ public class JwtService {
     }
 
     public String generateToken(Authentication authentication) {
-        return generateToken(authentication, authTokenExpirationDays * MILLSECONDS_IN_A_DAY)
+        return generateToken(authentication, MILLSECONDS_IN_A_DAY * authTokenExpirationDays)
                 .setHeaderParam("TokenType", "Auth")
                 .compact();
     }
 
     public String generateRefreshToken(Authentication authentication) {
-        return generateToken(authentication, refreshTokenExpirationDays * MILLSECONDS_IN_A_DAY)
+        return generateToken(authentication, MILLSECONDS_IN_A_DAY * refreshTokenExpirationDays)
                 .setHeaderParam("TokenType", "Refresh")
                 .compact();
     }
