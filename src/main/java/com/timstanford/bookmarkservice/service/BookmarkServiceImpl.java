@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -91,6 +90,13 @@ public class BookmarkServiceImpl implements BookmarkService {
             faviconDownloader.updateFavicon(bookmark.getId(), bookmark.getUrl());
             return bookmarkMapper.mapToBookmarkResponse(savedBookmark);
         }
+    }
+
+    @Override
+    public BookmarkResponse duplicateBookmark(int id) {
+        var clonedBookmark = bookmarksRepository.findById(id).orElseThrow().clone();
+        bookmarksRepository.save(clonedBookmark);
+        return bookmarkMapper.mapToBookmarkResponse(clonedBookmark);
     }
 
     @Override

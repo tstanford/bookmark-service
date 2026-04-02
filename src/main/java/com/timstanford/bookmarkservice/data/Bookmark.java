@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "bookmarks")
-public class Bookmark {
+public class Bookmark implements Cloneable {
 
     @Id
     @Column(name = "id", updatable = false)
@@ -63,5 +63,16 @@ public class Bookmark {
 
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
+    }
+
+    @Override
+    public Bookmark clone() {
+        try {
+            Bookmark clone = (Bookmark) super.clone();
+            clone.setId(0);
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

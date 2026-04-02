@@ -35,6 +35,9 @@ public interface BookmarksController {
     @PutMapping("/group")
     void addNewGroup(@RequestBody GroupMoveRequest request);
 
+    @GetMapping("/bookmarks/clone/{id}")
+    BookmarkResponse cloneBookmark(@PathVariable int id);
+
     @DeleteMapping("/group/{id}")
     void deleteGroup(@PathVariable int id);
 

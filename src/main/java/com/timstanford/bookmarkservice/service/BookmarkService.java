@@ -13,6 +13,8 @@ public interface BookmarkService {
 
     BookmarkResponse addBookmark(BookmarkRequest bookmarkRequest);
 
+    BookmarkResponse duplicateBookmark(int id);
+
     void deleteBookmark(int id);
 
     void deleteAll();

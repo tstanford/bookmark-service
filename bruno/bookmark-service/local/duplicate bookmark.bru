@@ -1,0 +1,16 @@
+meta {
+  name: duplicate bookmark
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{serviceurl}}/api/bookmarks
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

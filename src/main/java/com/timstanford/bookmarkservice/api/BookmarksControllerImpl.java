@@ -45,6 +45,11 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
+    public BookmarkResponse cloneBookmark(int id) {
+        return bookmarkService.duplicateBookmark(id);
+    }
+
+    @Override
     public void deleteGroup(int id) {
         bookmarkService.deleteGroup(id);
     }
