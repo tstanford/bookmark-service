@@ -2,6 +2,7 @@ package com.timstanford.bookmarkservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.timstanford.bookmarkservice.api.dtos.BookmarkEditRequest;
 import com.timstanford.bookmarkservice.api.BookmarkMapper;
 import com.timstanford.bookmarkservice.api.dtos.BookmarkRequest;
@@ -30,7 +31,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final BookmarkMapper bookmarkMapper;
     private final FaviconDownloader faviconDownloader;
     private final UserRepository userRepository;
-    private final ObjectMapper yamlMapper;
+    private final YAMLMapper yamlMapper;
 
     public BookmarkServiceImpl(
             BookmarksRepository bookmarksRepository,
@@ -38,7 +39,7 @@ public class BookmarkServiceImpl implements BookmarkService {
             BookmarkMapper bookmarkMapper,
             FaviconDownloader faviconDownloader,
             UserRepository userRepository,
-            @Qualifier("yamlmapper") ObjectMapper yamlMapper
+            YAMLMapper yamlMapper
     ) {
         this.bookmarksRepository = bookmarksRepository;
         this.groupRepository = groupRepository;
