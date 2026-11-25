@@ -3,10 +3,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/bookmarks
     username: bms_serviceuser
     password: UCz46Remt17nnsCD
-  security:
-    user:
-      name: admin
-      password: password
 
   jpa:
     generate-ddl: true
