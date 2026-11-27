@@ -1,7 +1,6 @@
 package com.timstanford.bookmarkservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.timstanford.bookmarkservice.api.dtos.BookmarkEditRequest;
 import com.timstanford.bookmarkservice.api.BookmarkMapper;
@@ -10,7 +9,6 @@ import com.timstanford.bookmarkservice.api.exceptions.BookmarkNotFoundException;
 import com.timstanford.bookmarkservice.api.exceptions.GroupAlreadyExistsException;
 import com.timstanford.bookmarkservice.api.exceptions.GroupNotFoundException;
 import com.timstanford.bookmarkservice.data.*;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -91,6 +89,12 @@ public class BookmarkServiceImpl implements BookmarkService {
             faviconDownloader.updateFavicon(bookmark.getId(), bookmark.getUrl());
             return bookmarkMapper.mapToBookmarkResponse(savedBookmark);
         }
+    }
+
+    @Override
+    public void refreshFavicon(int id){
+        String faviconUrl = bookmarksRepository.findById(id).orElseThrow().getUrl();
+        faviconDownloader.updateFavicon(id,faviconUrl);
     }
 
     @Override
