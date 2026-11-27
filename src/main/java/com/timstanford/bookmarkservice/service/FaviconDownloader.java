@@ -32,23 +32,6 @@ public class FaviconDownloader {
         this.bookmarksRepository = bookmarksRepository;
     }
 
-    private WebClient insecureWebClient() {
-        HttpClient httpClient = HttpClient.create()
-                .secure(t -> {
-                    try {
-                        t.sslContext(
-                                SslContextBuilder.forClient()
-                                        .trustManager(InsecureTrustManagerFactory.INSTANCE).build()
-                        );
-                    } catch (SSLException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-        return WebClient.builder()
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
-    }
-
     @Async
     private CompletableFuture<String> getFavicon(String websiteUrl) {
         String faviconUrl = null;
@@ -83,10 +66,26 @@ public class FaviconDownloader {
                 faviconUrl = url.getScheme() + "://" + url.getHost() + "/favicon.ico";
             }
 
-            WebClient client = insecureWebClient();
+            HttpClient httpClient = HttpClient.create()
+                    .followRedirect(true)
+                    .secure(sslSpec -> {
+                        try {
+                            sslSpec.sslContext(
+                                    SslContextBuilder.forClient()
+                                            .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                                            .build()
+                            );
+                        } catch (SSLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+
+            WebClient webClient = WebClient.builder()
+                    .clientConnector(new ReactorClientHttpConnector(httpClient))
+                    .build();
 
             //get mime type
-            ResponseEntity<String> response = client.get()
+            ResponseEntity<String> response = webClient.get()
                     .uri(faviconUrl)
                     .retrieve()
                     .toEntity(String.class)
@@ -94,7 +93,8 @@ public class FaviconDownloader {
             String contentType = response.getHeaders().getContentType().toString();
 
             // Download the favicon
-            byte[] data = client.get()
+            byte[] data = webClient.get()
+                    .uri(faviconUrl)
                     .retrieve()
                     .bodyToMono(byte[].class)
                     .share()
