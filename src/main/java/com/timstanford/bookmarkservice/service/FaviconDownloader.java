@@ -1,20 +1,21 @@
 package com.timstanford.bookmarkservice.service;
 
 import com.timstanford.bookmarkservice.data.BookmarksRepository;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.*;
 import java.net.URI;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -29,6 +30,23 @@ public class FaviconDownloader {
 
     public FaviconDownloader(BookmarksRepository bookmarksRepository) {
         this.bookmarksRepository = bookmarksRepository;
+    }
+
+    private WebClient insecureWebClient() {
+        HttpClient httpClient = HttpClient.create()
+                .secure(t -> {
+                    try {
+                        t.sslContext(
+                                SslContextBuilder.forClient()
+                                        .trustManager(InsecureTrustManagerFactory.INSTANCE).build()
+                        );
+                    } catch (SSLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+        return WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
     }
 
     @Async
@@ -65,10 +83,11 @@ public class FaviconDownloader {
                 faviconUrl = url.getScheme() + "://" + url.getHost() + "/favicon.ico";
             }
 
-            WebClient client = WebClient.create(faviconUrl);
+            WebClient client = insecureWebClient();
 
             //get mime type
             ResponseEntity<String> response = client.get()
+                    .uri(faviconUrl)
                     .retrieve()
                     .toEntity(String.class)
                     .block();

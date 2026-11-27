@@ -26,6 +26,12 @@ public interface BookmarksController {
     @DeleteMapping("/bookmarks/{id}")
     void deleteBookmark(@PathVariable int id);
 
+    @PostMapping("/bookmarks/{id}/favicon/refresh")
+    void refreshFavicon(@PathVariable int id);
+
+    @PostMapping("/bookmarks/favicon/refresh")
+    void refreshFavicon(@RequestBody List<Integer> ids);
+
     @PutMapping("/bookmarks/icon/{id}")
     void updateIcon(@PathVariable int id, @RequestBody Optional<String> data);
 

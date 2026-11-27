@@ -60,6 +60,16 @@ public class BookmarksControllerImpl implements BookmarksController {
     }
 
     @Override
+    public void refreshFavicon(int id) {
+        bookmarkService.refreshFavicon(id);
+    }
+
+    @Override
+    public void refreshFavicon(List<Integer> ids) {
+        ids.forEach(bookmarkService::refreshFavicon);
+    }
+
+    @Override
     public void updateIcon(int id, Optional<String> data) {
         bookmarkService.updateIcon(id, data);
     }
