@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,6 +68,16 @@ public class BookmarksControllerImpl implements BookmarksController {
     @Override
     public void refreshFavicon(List<Integer> ids) {
         ids.forEach(bookmarkService::refreshFavicon);
+    }
+
+    @Override
+    public void refreshFavicon() {
+        var bookmarks = bookmarkService.getAllBookmarks();
+        var ids = new ArrayList<Integer>();
+        bookmarks.forEach(group -> group.getBookmarks().forEach(bookmark -> {
+            ids.add(bookmark.getId());
+        }));
+        refreshFavicon(ids);
     }
 
     @Override
