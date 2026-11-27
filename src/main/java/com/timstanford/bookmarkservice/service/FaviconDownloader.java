@@ -32,23 +32,6 @@ public class FaviconDownloader {
         this.bookmarksRepository = bookmarksRepository;
     }
 
-    private WebClient insecureWebClient() {
-        HttpClient httpClient = HttpClient.create()
-                .secure(t -> {
-                    try {
-                        t.sslContext(
-                                SslContextBuilder.forClient()
-                                        .trustManager(InsecureTrustManagerFactory.INSTANCE).build()
-                        );
-                    } catch (SSLException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-        return WebClient.builder()
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
-    }
-
     @Async
     private CompletableFuture<String> getFavicon(String websiteUrl) {
         String faviconUrl = null;
@@ -83,11 +66,10 @@ public class FaviconDownloader {
                 faviconUrl = url.getScheme() + "://" + url.getHost() + "/favicon.ico";
             }
 
-            WebClient client = insecureWebClient();
+            WebClient client = WebClient.create(faviconUrl);
 
             //get mime type
             ResponseEntity<String> response = client.get()
-                    .uri(faviconUrl)
                     .retrieve()
                     .toEntity(String.class)
                     .block();
