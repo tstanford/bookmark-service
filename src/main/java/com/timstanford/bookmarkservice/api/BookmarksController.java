@@ -32,6 +32,9 @@ public interface BookmarksController {
     @PostMapping("/bookmarks/favicon/refresh")
     void refreshFavicon(@RequestBody List<Integer> ids);
 
+    @PostMapping("/bookmarks/all/favicon/refresh")
+    void refreshFavicon();
+
     @PutMapping("/bookmarks/icon/{id}")
     void updateIcon(@PathVariable int id, @RequestBody Optional<String> data);
 
